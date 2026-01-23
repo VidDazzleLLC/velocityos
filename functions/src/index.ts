@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import express from "express";
+import express, {Request, Response} from "express";
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -12,12 +12,12 @@ const app = express();
 app.use(express.json());
 
 // Basic health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({status: "ok", timestamp: Date.now()});
 });
 
 // API routes will be added here
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
     message: "VelocityOS API",
     version: "1.0.0",

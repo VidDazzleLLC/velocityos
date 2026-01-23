@@ -81,13 +81,9 @@ jobs:
         working-directory: velocity-os-rebuilt
         run: npm test
 
-      - name: Build Next.js app
+      - name: Build Next.js app (includes static export)
         working-directory: velocity-os-rebuilt
         run: npm run build
-
-      - name: Export static site
-        working-directory: velocity-os-rebuilt
-        run: npm run export
 
       # Upload build artifacts for deployment verification
       - name: Upload build artifacts
