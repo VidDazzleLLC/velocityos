@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VelocityOS - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .auth-left {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .auth-left h1 { font-size: 2.5rem; margin-bottom: 20px; }
+        .auth-left p { font-size: 1.1rem; opacity: 0.9; line-height: 1.6; }
+        .auth-right { padding: 60px 40px; }
+        .auth-right h2 { font-size: 2rem; margin-bottom: 10px; color: #333; }
+        .auth-right .subtitle { color: #666; margin-bottom: 40px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .divider { text-align: center; margin: 30px 0; color: #999; }
+        .social-login { display: flex; gap: 15px; margin-bottom: 20px; }
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .social-btn:hover { border-color: #667eea; color: #667eea; }
+        @media (max-width: 768px) {
+            .auth-container { grid-template-columns: 1fr; }
+            .auth-left { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-left">
+            <h1>VelocityOS</h1>
+            <p>The AI-powered business operating system that automates your workflow, unifies your data, and accelerates your growth.</p>
+        </div>
+        <div class="auth-right">
+            <h2>Welcome back</h2>
+            <p class="subtitle">Sign in to continue to VelocityOS</p>
+            <div class="social-login">
+                <button class="social-btn">Google</button>
+                <button class="social-btn">Microsoft</button>
+            </div>
+            <div class="divider">or sign in with email</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" placeholder="you@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign in</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = '../dashboard/index.html';
+        });
+    </script>
+</body>
+</html>
