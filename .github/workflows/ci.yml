@@ -91,7 +91,7 @@ jobs:
 
       # Upload build artifacts for deployment verification
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: frontend-build
           path: velocity-os-rebuilt/out
@@ -133,7 +133,7 @@ jobs:
 
       # Upload compiled functions for deployment verification
       - name: Upload compiled functions
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: backend-build
           path: functions/lib
@@ -165,13 +165,13 @@ jobs:
 
       # Download build artifacts from previous jobs
       - name: Download frontend build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.8
         with:
           name: frontend-build
           path: velocity-os-rebuilt/out
 
       - name: Download backend build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.8
         with:
           name: backend-build
           path: functions/lib
