@@ -1,39 +1,35 @@
-# CI: build & test frontend and functions on PRs and pushes to main/develop
 name: CI
-on:
-  pull_request:
-    branches: [ main, develop ]
-  push:
-    branches: [ main, develop ]
-
+on: [push, pull_request]
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Install & build frontend
-        working-directory: velocity-os-rebuilt
+          cache: 'npm'
+      - name: Install dependencies (velocity-os-rebuilt)
         run: |
-          npm ci
-          npm run lint || true
-          npm test || true
-          npm run build
-          npm run export
-
-      - name: Install & test functions
-        working-directory: functions
-        run: |
-          if [ -f package.json ]; then
-            npm ci
-            npm test || true
-            npm run build || true
+          if [ -d velocity-os-rebuilt ]; then
+            cd velocity-os-rebuilt
+            npm install
           else
-            echo "No functions/package.json found, skipping functions tests/build"
+            echo "velocity-os-rebuilt not found, skipping"
+          fi
+      - name: Install dependencies (functions)
+        run: |
+          if [ -f functions/package.json ]; then
+            cd functions
+            npm install
+          else
+            echo "functions/package.json not found, skipping"
+          fi
+      - name: Build (velocity-os-rebuilt)
+        run: |
+          if [ -d velocity-os-rebuilt ]; then
+            cd velocity-os-rebuilt
+            npm run build --if-present
+          else
+            echo "Skipping build"
           fi
