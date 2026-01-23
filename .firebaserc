@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "velocityos-staging",
+    "prod": "velocityos-production"
+  }
+}
