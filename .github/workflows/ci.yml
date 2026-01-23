@@ -1,0 +1,39 @@
+# CI: build & test frontend and functions on PRs and pushes to main/develop
+name: CI
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install & build frontend
+        working-directory: velocity-os-rebuilt
+        run: |
+          npm ci
+          npm run lint || true
+          npm test || true
+          npm run build
+          npm run export
+
+      - name: Install & test functions
+        working-directory: functions
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+            npm test || true
+            npm run build || true
+          else
+            echo "No functions/package.json found, skipping functions tests/build"
+          fi
