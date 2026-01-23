@@ -1,0 +1,22 @@
+{
+  "name": "velocity-os-rebuilt",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next export -o out",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "echo \"no frontend tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "next": "14.x",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-next": "14.x"
+  }
+}
