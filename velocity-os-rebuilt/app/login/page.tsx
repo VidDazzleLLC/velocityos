@@ -10,7 +10,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement actual authentication in PR #6
+    // TODO: Implement actual authentication with Firebase
     router.push('/dashboard')
   }
 

@@ -1,10 +1,26 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
+
+const getPageTitle = (pathname: string) => {
+  const titles: { [key: string]: string } = {
+    '/dashboard': 'Dashboard',
+    '/customers': 'Customers',
+    '/communications': 'Communications',
+    '/reports': 'Reports & Analytics',
+    '/settings': 'Settings',
+  }
+  return titles[pathname] || 'Dashboard'
+}
+
 export default function TopNav() {
+  const pathname = usePathname()
+  const title = getPageTitle(pathname)
+
   return (
     <header className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center">
       <div>
-        <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
+        <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
       </div>
       <div className="flex items-center gap-4">
         <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">

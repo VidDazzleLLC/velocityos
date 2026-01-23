@@ -62,12 +62,15 @@ export default function CommunicationsPage() {
         ))}
       </div>
 
-      {/* Message Templates Section */}
+      {/* Message Templates Section - Placeholder for future implementation */}
       <div className="mt-8 bg-white rounded-xl p-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Messages</h2>
-        <p className="text-gray-600">
-          TODO: Message history and templates will be implemented in future PRs.
-        </p>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Message Templates</h2>
+        <div className="text-center py-8 text-gray-500">
+          <p className="mb-2">No message templates yet</p>
+          <button className="mt-4 px-6 py-2 border-2 border-[#667eea] text-[#667eea] font-medium rounded-lg hover:bg-[#667eea] hover:text-white transition-all">
+            Create Template
+          </button>
+        </div>
       </div>
     </AuthenticatedLayout>
   )
