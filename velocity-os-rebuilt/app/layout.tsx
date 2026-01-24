@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'VelocityOS',
-  description: 'Customer Success Operating System',
+  title: 'VelocityOS - AI-Powered Business Operating System',
+  description: 'The AI-powered business operating system that automates your workflow, unifies your data, and accelerates your growth.',
 }
 
 export default function RootLayout({

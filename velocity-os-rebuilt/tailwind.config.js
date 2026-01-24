@@ -6,7 +6,18 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#00D4FF',  // Evolve cyan/turquoise
+          dark: '#7B61FF',      // Evolve purple
+        },
+        evolve: {
+          cyan: '#00D4FF',
+          purple: '#7B61FF',
+        },
+      },
+    },
   },
   plugins: [],
 }
