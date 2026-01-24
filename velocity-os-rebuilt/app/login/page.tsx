@@ -15,10 +15,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center p-5">
+    <div className="min-h-screen bg-gradient-to-br from-[#7B61FF] to-[#00D4FF] flex items-center justify-center p-5">
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-5xl w-full grid md:grid-cols-2">
         {/* Left Panel */}
-        <div className="bg-gradient-to-br from-[#667eea] to-[#764ba2] p-16 text-white flex flex-col justify-center hidden md:flex">
+        <div className="bg-gradient-to-br from-[#7B61FF] to-[#00D4FF] p-16 text-white flex flex-col justify-center hidden md:flex">
           <h1 className="text-5xl font-bold mb-5">VelocityOS</h1>
           <p className="text-lg opacity-90 leading-relaxed">
             The AI-powered business operating system that automates your workflow, 
@@ -33,10 +33,10 @@ export default function LoginPage() {
 
           {/* Social Login Buttons */}
           <div className="flex gap-4 mb-8">
-            <button className="flex-1 py-3 px-4 border-2 border-gray-200 rounded-xl font-medium hover:border-[#667eea] hover:text-[#667eea] transition-all">
+            <button className="flex-1 py-3 px-4 border-2 border-gray-200 rounded-xl font-medium hover:border-[#00D4FF] hover:text-[#00D4FF] transition-all">
               Google
             </button>
-            <button className="flex-1 py-3 px-4 border-2 border-gray-200 rounded-xl font-medium hover:border-[#667eea] hover:text-[#667eea] transition-all">
+            <button className="flex-1 py-3 px-4 border-2 border-gray-200 rounded-xl font-medium hover:border-[#00D4FF] hover:text-[#00D4FF] transition-all">
               Microsoft
             </button>
           </div>
@@ -55,7 +55,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#667eea] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#00D4FF] focus:outline-none transition-colors"
               />
             </div>
 
@@ -69,13 +69,13 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#667eea] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#00D4FF] focus:outline-none transition-colors"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-semibold rounded-xl hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+              className="w-full py-3 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-xl hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
             >
               Sign in
             </button>

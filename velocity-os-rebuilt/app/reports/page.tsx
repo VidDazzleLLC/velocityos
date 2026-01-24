@@ -13,7 +13,7 @@ export default function ReportsPage() {
           <p className="text-sm text-gray-600 mb-4">
             Track sales performance, revenue trends, and conversion metrics.
           </p>
-          <button className="text-[#667eea] font-medium hover:text-[#764ba2]">
+          <button className="text-[#00D4FF] font-medium hover:text-[#7B61FF]">
             View Report →
           </button>
         </div>
@@ -24,7 +24,7 @@ export default function ReportsPage() {
           <p className="text-sm text-gray-600 mb-4">
             Analyze customer behavior, retention, and lifetime value.
           </p>
-          <button className="text-[#667eea] font-medium hover:text-[#764ba2]">
+          <button className="text-[#00D4FF] font-medium hover:text-[#7B61FF]">
             View Report →
           </button>
         </div>
@@ -35,7 +35,7 @@ export default function ReportsPage() {
           <p className="text-sm text-gray-600 mb-4">
             Monitor user growth, engagement, and key business metrics.
           </p>
-          <button className="text-[#667eea] font-medium hover:text-[#764ba2]">
+          <button className="text-[#00D4FF] font-medium hover:text-[#7B61FF]">
             View Report →
           </button>
         </div>
@@ -46,7 +46,7 @@ export default function ReportsPage() {
           <p className="text-sm text-gray-600 mb-4">
             Measure email, SMS, and marketing campaign effectiveness.
           </p>
-          <button className="text-[#667eea] font-medium hover:text-[#764ba2]">
+          <button className="text-[#00D4FF] font-medium hover:text-[#7B61FF]">
             View Report →
           </button>
         </div>
@@ -57,7 +57,7 @@ export default function ReportsPage() {
           <p className="text-sm text-gray-600 mb-4">
             Get AI-powered recommendations and predictive analytics.
           </p>
-          <button className="text-[#667eea] font-medium hover:text-[#764ba2]">
+          <button className="text-[#00D4FF] font-medium hover:text-[#7B61FF]">
             View Report →
           </button>
         </div>
@@ -68,7 +68,7 @@ export default function ReportsPage() {
           <p className="text-sm text-gray-600 mb-4">
             Review revenue, expenses, and profitability metrics.
           </p>
-          <button className="text-[#667eea] font-medium hover:text-[#764ba2]">
+          <button className="text-[#00D4FF] font-medium hover:text-[#7B61FF]">
             View Report →
           </button>
         </div>
@@ -81,10 +81,10 @@ export default function ReportsPage() {
           Generate and download reports in various formats.
         </p>
         <div className="flex gap-3">
-          <button className="px-6 py-2 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+          <button className="px-6 py-2 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
             Export to PDF
           </button>
-          <button className="px-6 py-2 border-2 border-[#667eea] text-[#667eea] font-semibold rounded-lg hover:bg-[#667eea] hover:text-white transition-all">
+          <button className="px-6 py-2 border-2 border-[#00D4FF] text-[#00D4FF] font-semibold rounded-lg hover:bg-[#00D4FF] hover:text-white transition-all">
             Export to CSV
           </button>
         </div>

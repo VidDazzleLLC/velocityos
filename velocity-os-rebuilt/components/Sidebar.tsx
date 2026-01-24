@@ -15,7 +15,7 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white fixed h-screen p-8">
+    <aside className="w-64 bg-gradient-to-br from-[#7B61FF] to-[#00D4FF] text-white fixed h-screen p-8">
       <h1 className="text-3xl font-bold mb-10">VelocityOS</h1>
       <nav className="space-y-2">
         {navItems.map((item) => {
