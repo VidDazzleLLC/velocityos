@@ -22,8 +22,6 @@ coverage/
 # Logs
 *.log
 npm-debug.log*
-firebase-debug.log
-firebase-debug.*.log
 
 # Editor directories and files
 .vscode/
@@ -31,7 +29,3 @@ firebase-debug.*.log
 *.swp
 *.swo
 *~
-
-# Runtime config
-.runtimeconfig.json
-*.local
