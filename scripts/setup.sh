@@ -130,12 +130,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         # Update .env file on macOS and Linux
         if [[ "$OSTYPE" == "darwin"* ]]; then
             # macOS
-            sed -i '' "s/JWT_SECRET=.*/JWT_SECRET=$JWT_SECRET/" .env
-            sed -i '' "s/SESSION_SECRET=.*/SESSION_SECRET=$SESSION_SECRET/" .env
+            sed -i '' "s|JWT_SECRET=.*|JWT_SECRET=$JWT_SECRET|" .env
+            sed -i '' "s|SESSION_SECRET=.*|SESSION_SECRET=$SESSION_SECRET|" .env
         else
             # Linux
-            sed -i "s/JWT_SECRET=.*/JWT_SECRET=$JWT_SECRET/" .env
-            sed -i "s/SESSION_SECRET=.*/SESSION_SECRET=$SESSION_SECRET/" .env
+            sed -i "s|JWT_SECRET=.*|JWT_SECRET=$JWT_SECRET|" .env
+            sed -i "s|SESSION_SECRET=.*|SESSION_SECRET=$SESSION_SECRET|" .env
         fi
         
         print_success "Secrets generated and saved to .env"

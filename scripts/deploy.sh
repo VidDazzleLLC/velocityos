@@ -196,11 +196,15 @@ if [ $? -eq 0 ]; then
     if [[ $DEPLOY_TARGET == *"hosting"* ]]; then
         echo "🌐 Your app is live at:"
         if [ "$PROJECT" == "prod" ]; then
-            echo "   https://velocityos-production.web.app"
-            echo "   https://velocityos-production.firebaseapp.com"
+            # Get actual Firebase project ID from .firebaserc
+            PROD_PROJECT=$(grep -A 1 '"prod"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+            echo "   https://$PROD_PROJECT.web.app"
+            echo "   https://$PROD_PROJECT.firebaseapp.com"
         else
-            echo "   https://velocityos-staging.web.app"
-            echo "   https://velocityos-staging.firebaseapp.com"
+            # Get actual Firebase project ID from .firebaserc
+            DEFAULT_PROJECT=$(grep -A 1 '"default"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+            echo "   https://$DEFAULT_PROJECT.web.app"
+            echo "   https://$DEFAULT_PROJECT.firebaseapp.com"
         fi
         echo ""
     fi
