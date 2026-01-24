@@ -1,0 +1,31 @@
+# Git Attributes Configuration
+# This file controls how Git handles various file types during merge operations
+
+# package-lock.json files
+# Allow manual merge conflict resolution while recommending regeneration
+# Using "text" attribute ensures GitHub doesn't treat these as binary files
+# This enables the "Mark as resolved" button in GitHub's merge conflict UI
+package-lock.json text merge=auto linguist-generated=true
+**/package-lock.json text merge=auto linguist-generated=true
+
+# While the "Mark as resolved" button will now be enabled, it's still
+# recommended to regenerate package-lock.json by running `npm install`
+# after resolving conflicts in package.json to ensure file integrity.
+
+# Additional common file type configurations
+*.json text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.jsx text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

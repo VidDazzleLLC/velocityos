@@ -179,6 +179,30 @@ If you suspect cache corruption:
 - Run `npm run build` locally to check compilation
 - Check that all type definitions are installed
 
+### Merge Conflicts in package-lock.json
+
+When you encounter merge conflicts in `package-lock.json` files during pull requests:
+
+**Option 1: Regenerate (Recommended)**
+```bash
+# In the directory with the conflicted package-lock.json
+rm package-lock.json
+npm install
+git add package-lock.json
+```
+
+**Option 2: Manual Resolution**
+- The repository's `.gitattributes` file enables the "Mark as resolved" button in GitHub's UI
+- You can now manually resolve conflicts in `package-lock.json` files
+- However, regenerating (Option 1) is still recommended to ensure file integrity
+
+**For this repository:**
+- Root: `/package-lock.json`
+- Frontend: `/velocity-os-rebuilt/package-lock.json`  
+- Backend: `/functions/package-lock.json`
+
+Apply the conflict resolution to the specific directory where conflicts occur.
+
 ## Security
 
 - Workflow uses minimal permissions (`contents: read`)
