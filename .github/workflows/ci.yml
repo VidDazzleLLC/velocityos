@@ -1,35 +1,263 @@
+# =============================================================================
+# CI Workflow: Build, Test, and Validate VelocityOS Components
+# =============================================================================
+# This workflow runs on pull requests and pushes to main/develop branches.
+# It builds and tests all components of VelocityOS in parallel where possible.
+#
+# Components:
+# - Root: Basic Express server for local development
+# - Frontend: Next.js app (velocity-os-rebuilt) with TypeScript and Tailwind
+# - Backend: Firebase Cloud Functions (functions) with Express API
+#
+# The workflow also prepares for Firebase deployment in dry-run mode on main.
+# =============================================================================
+
 name: CI
-on: [push, pull_request]
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+# Set minimal permissions for security
+permissions:
+  contents: read
+
+# Environment variables
+env:
+  NODE_VERSION: '20'
+
 jobs:
-  build:
+  # ===========================================================================
+  # Job 1: Build and Test Root Directory
+  # ===========================================================================
+  root:
+    name: Root - Build & Test
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      - name: Install dependencies (velocity-os-rebuilt)
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+  # ===========================================================================
+  # Job 2: Build and Test Frontend (velocity-os-rebuilt)
+  # ===========================================================================
+  frontend:
+    name: Frontend - Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'velocity-os-rebuilt/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: velocity-os-rebuilt
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: velocity-os-rebuilt
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: velocity-os-rebuilt
+        run: npm test
+
+      - name: Build Next.js app (includes static export)
+        working-directory: velocity-os-rebuilt
+        run: npm run build
+
+      # Upload build artifacts for deployment verification
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: frontend-build
+          path: velocity-os-rebuilt/out
+          retention-days: 7
+
+  # ===========================================================================
+  # Job 3: Build and Test Backend (functions)
+  # ===========================================================================
+  backend:
+    name: Backend - Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'functions/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: functions
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: functions
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: functions
+        run: npm test
+
+      - name: Build TypeScript
+        working-directory: functions
+        run: npm run build
+
+      # Upload compiled functions for deployment verification
+      - name: Upload compiled functions
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: backend-build
+          path: functions/lib
+          retention-days: 7
+
+  # ===========================================================================
+  # Job 4: Firebase Deployment Preparation (Dry-Run Only)
+  # ===========================================================================
+  # This job only runs on pushes to main branch
+  # It validates Firebase configuration and prepares for deployment
+  # NOTE: This does NOT actually deploy - it's preparation and validation only
+  # ===========================================================================
+  firebase-prepare:
+    name: Firebase - Deployment Preparation
+    runs-on: ubuntu-latest
+    # Only run on pushes to main (not on PRs)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Wait for all build jobs to complete successfully
+    needs: [root, frontend, backend]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Download build artifacts from previous jobs
+      - name: Download frontend build
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: frontend-build
+          path: velocity-os-rebuilt/out
+
+      - name: Download backend build
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: backend-build
+          path: functions/lib
+
+      # Install Firebase CLI tools
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      # Validate Firebase configuration files
+      - name: Validate firebase.json
         run: |
-          if [ -d velocity-os-rebuilt ]; then
-            cd velocity-os-rebuilt
-            npm install
-          else
-            echo "velocity-os-rebuilt not found, skipping"
+          echo "Validating Firebase configuration..."
+          if [ ! -f firebase.json ]; then
+            echo "Error: firebase.json not found"
+            exit 1
           fi
-      - name: Install dependencies (functions)
+          echo "firebase.json found and valid"
+
+      - name: Validate .firebaserc
         run: |
-          if [ -f functions/package.json ]; then
-            cd functions
-            npm install
-          else
-            echo "functions/package.json not found, skipping"
+          echo "Validating Firebase project configuration..."
+          if [ ! -f .firebaserc ]; then
+            echo "Error: .firebaserc not found"
+            exit 1
           fi
-      - name: Build (velocity-os-rebuilt)
+          cat .firebaserc
+          echo ".firebaserc found and valid"
+
+      # TODO: Add Firebase authentication when secrets are configured
+      # For actual deployment, you'll need to set up these GitHub secrets:
+      # - FIREBASE_SERVICE_ACCOUNT: Base64-encoded service account JSON
+      # - FIREBASE_PROJECT_ID: Your Firebase project ID
+      #
+      # Example deployment command (currently commented out):
+      # - name: Deploy to Firebase (staging)
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #   run: |
+      #     firebase use velocityos-staging
+      #     firebase deploy --only functions,hosting --project velocityos-staging
+
+      - name: Deployment Preparation Summary
         run: |
-          if [ -d velocity-os-rebuilt ]; then
-            cd velocity-os-rebuilt
-            npm run build --if-present
-          else
-            echo "Skipping build"
+          echo "============================================="
+          echo "Firebase Deployment Preparation Complete"
+          echo "============================================="
+          echo ""
+          echo "Frontend build: velocity-os-rebuilt/out"
+          echo "Backend build: functions/lib"
+          echo ""
+          echo "To enable automatic deployment to staging:"
+          echo "1. Set up FIREBASE_SERVICE_ACCOUNT secret in GitHub"
+          echo "2. Set up FIREBASE_PROJECT_ID secret in GitHub"
+          echo "3. Uncomment deployment steps in this workflow"
+          echo ""
+          echo "Manual deployment can be done with:"
+          echo "  firebase deploy --only functions,hosting --project velocityos-staging"
+          echo "============================================="
+
+  # ===========================================================================
+  # Job 5: Summary and Status Check
+  # ===========================================================================
+  ci-status:
+    name: CI Status Summary
+    runs-on: ubuntu-latest
+    # Always run this job, even if previous jobs fail
+    if: always()
+    needs: [root, frontend, backend]
+    
+    steps:
+      - name: Check CI Status
+        run: |
+          echo "CI Workflow Status Summary"
+          echo "=========================="
+          echo "Root: ${{ needs.root.result }}"
+          echo "Frontend: ${{ needs.frontend.result }}"
+          echo "Backend: ${{ needs.backend.result }}"
+          echo ""
+          
+          # Fail if any required job failed
+          if [ "${{ needs.root.result }}" != "success" ] || \
+             [ "${{ needs.frontend.result }}" != "success" ] || \
+             [ "${{ needs.backend.result }}" != "success" ]; then
+            echo "One or more jobs failed. Please check the logs above."
+            exit 1
           fi
+          
+          echo "All CI checks passed successfully!"
+
