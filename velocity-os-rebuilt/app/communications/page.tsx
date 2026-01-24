@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { apiClient } from '@/lib/api';
 import type { StartCampaignPayload } from '@/types/api';
+import AuthenticatedLayout from '@/components/AuthenticatedLayout';
 
 export default function CommunicationsPage() {
   const [formData, setFormData] = useState<StartCampaignPayload>({
@@ -82,135 +83,90 @@ export default function CommunicationsPage() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '2rem' }}>Communications</h1>
+    <AuthenticatedLayout>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Communications</h1>
 
-      {success && (
-        <div style={{
-          padding: '1rem',
-          background: '#d4edda',
-          border: '1px solid #c3e6cb',
-          borderRadius: '4px',
-          marginBottom: '2rem',
-          color: '#155724',
-        }}>
-          ✓ Campaign started successfully! Your message is being sent.
-        </div>
-      )}
-
-      <div style={{
-        background: 'white',
-        padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      }}>
-        <h2 style={{ marginBottom: '1.5rem' }}>Start New Campaign</h2>
-        
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Campaign Name *
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="e.g., Spring Sale 2024"
-              required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '1rem',
-              }}
-            />
+        {success && (
+          <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-8 text-green-800">
+            ✓ Campaign started successfully! Your message is being sent.
           </div>
+        )}
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Recipients * 
-              <span style={{ fontWeight: 'normal', color: '#666', fontSize: '0.875rem' }}>
-                {' '}(comma or newline separated emails)
-              </span>
-            </label>
-            <textarea
-              value={recipientsText}
-              onChange={handleRecipientsChange}
-              placeholder="user1@example.com, user2@example.com&#10;user3@example.com"
-              rows={5}
-              required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '1rem',
-                fontFamily: 'monospace',
-              }}
-            />
-            <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.5rem' }}>
-              {formData.recipients.length} recipient(s)
-            </p>
-          </div>
-
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Message *
-            </label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleInputChange}
-              placeholder="Enter your campaign message here..."
-              rows={8}
-              required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '1rem',
-              }}
-            />
-          </div>
-
-          {error && (
-            <div style={{
-              padding: '1rem',
-              background: '#fee',
-              border: '1px solid #fcc',
-              borderRadius: '4px',
-              marginBottom: '1rem',
-              color: '#c00',
-            }}>
-              {error}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <h2 className="text-2xl font-semibold mb-6">Start New Campaign</h2>
+          
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block mb-2 font-semibold text-gray-700">
+                Campaign Name *
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="e.g., Spring Sale 2024"
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#00D4FF] transition-colors"
+              />
             </div>
-          )}
 
-          <button
-            type="submit"
-            disabled={submitting}
-            style={{
-              padding: '0.75rem 2rem',
-              background: submitting ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              fontWeight: 'bold',
-              fontSize: '1rem',
-              cursor: submitting ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {submitting ? 'Starting Campaign...' : 'Start Campaign'}
-          </button>
-        </form>
-      </div>
+            <div className="mb-4">
+              <label className="block mb-2 font-semibold text-gray-700">
+                Recipients * 
+                <span className="font-normal text-gray-600 text-sm">
+                  {' '}(comma or newline separated emails)
+                </span>
+              </label>
+              <textarea
+                value={recipientsText}
+                onChange={handleRecipientsChange}
+                placeholder="user1@example.com, user2@example.com&#10;user3@example.com"
+                rows={5}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#00D4FF] transition-colors font-mono"
+              />
+              <p className="text-sm text-gray-600 mt-2">
+                {formData.recipients.length} recipient(s)
+              </p>
+            </div>
 
-      <div style={{ marginTop: '2rem' }}>
-        <a href="/" style={{ color: '#007bff' }}>← Back to Home</a>
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold text-gray-700">
+                Message *
+              </label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
+                placeholder="Enter your campaign message here..."
+                rows={8}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#00D4FF] transition-colors"
+              />
+            </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-6 text-red-800">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className={`px-6 py-3 font-semibold rounded-lg transition-all ${
+                submitting
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white hover:shadow-lg'
+              }`}
+            >
+              {submitting ? 'Starting Campaign...' : 'Start Campaign'}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </AuthenticatedLayout>
   );
 }

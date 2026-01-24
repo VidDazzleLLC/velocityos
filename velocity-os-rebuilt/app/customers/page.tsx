@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/api';
 import type { Customer, CreateCustomerPayload } from '@/types/api';
+import AuthenticatedLayout from '@/components/AuthenticatedLayout';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -83,228 +84,140 @@ export default function CustomersPage() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1>Customers</h1>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          style={{
-            padding: '0.75rem 1.5rem',
-            background: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontWeight: 'bold',
-          }}
-        >
-          {showForm ? 'Cancel' : '+ Add Customer'}
-        </button>
-      </div>
-
-      {formSuccess && (
-        <div style={{
-          padding: '1rem',
-          background: '#d4edda',
-          border: '1px solid #c3e6cb',
-          borderRadius: '4px',
-          marginBottom: '1rem',
-          color: '#155724',
-        }}>
-          ✓ Customer created successfully!
-        </div>
-      )}
-
-      {showForm && (
-        <div style={{
-          background: 'white',
-          padding: '2rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          marginBottom: '2rem',
-        }}>
-          <h2 style={{ marginBottom: '1.5rem' }}>Create New Customer</h2>
-          
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                Name *
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                Email *
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                Phone (optional)
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                }}
-              />
-            </div>
-
-            {formError && (
-              <div style={{
-                padding: '1rem',
-                background: '#fee',
-                border: '1px solid #fcc',
-                borderRadius: '4px',
-                marginBottom: '1rem',
-                color: '#c00',
-              }}>
-                {formError}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={formSubmitting}
-              style={{
-                padding: '0.75rem 2rem',
-                background: formSubmitting ? '#ccc' : '#28a745',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                fontWeight: 'bold',
-                cursor: formSubmitting ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {formSubmitting ? 'Creating...' : 'Create Customer'}
-            </button>
-          </form>
-        </div>
-      )}
-
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem' }}>
-          <div style={{
-            border: '4px solid #f3f3f3',
-            borderTop: '4px solid #007bff',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto',
-          }} />
-          <p style={{ marginTop: '1rem' }}>Loading customers...</p>
-          <style jsx>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
-      ) : error ? (
-        <div style={{
-          padding: '2rem',
-          background: '#fee',
-          border: '1px solid #fcc',
-          borderRadius: '4px',
-        }}>
-          <p style={{ color: '#c00', fontWeight: 'bold' }}>Error: {error}</p>
+    <AuthenticatedLayout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
           <button
-            onClick={fetchCustomers}
-            style={{
-              marginTop: '1rem',
-              padding: '0.5rem 1rem',
-              background: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-            }}
+            onClick={() => setShowForm(!showForm)}
+            className="px-6 py-3 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-lg hover:shadow-lg transition-all"
           >
-            Retry
+            {showForm ? 'Cancel' : '+ Add Customer'}
           </button>
         </div>
-      ) : customers.length === 0 ? (
-        <div style={{
-          padding: '3rem',
-          textAlign: 'center',
-          background: 'white',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        }}>
-          <p style={{ fontSize: '1.25rem', color: '#666' }}>No customers yet</p>
-          <p style={{ marginTop: '0.5rem', color: '#999' }}>
-            Click "Add Customer" to create your first customer
-          </p>
-        </div>
-      ) : (
-        <div style={{
-          background: 'white',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          overflow: 'hidden',
-        }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ background: '#f8f9fa' }}>
-                <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Name</th>
-                <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Email</th>
-                <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Phone</th>
-                <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Created At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customers.map((customer) => (
-                <tr key={customer.id} style={{ borderBottom: '1px solid #dee2e6' }}>
-                  <td style={{ padding: '1rem' }}>{customer.name}</td>
-                  <td style={{ padding: '1rem' }}>{customer.email}</td>
-                  <td style={{ padding: '1rem' }}>{customer.phone || '-'}</td>
-                  <td style={{ padding: '1rem' }}>
-                    {new Date(customer.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
 
-      <div style={{ marginTop: '2rem' }}>
-        <a href="/" style={{ color: '#007bff' }}>← Back to Home</a>
+        {formSuccess && (
+          <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-6 text-green-800">
+            ✓ Customer created successfully!
+          </div>
+        )}
+
+        {showForm && (
+          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-2xl font-semibold mb-6">Create New Customer</h2>
+            
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold text-gray-700">
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#00D4FF] transition-colors"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold text-gray-700">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#00D4FF] transition-colors"
+                />
+              </div>
+
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">
+                  Phone (optional)
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#00D4FF] transition-colors"
+                />
+              </div>
+
+              {formError && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-6 text-red-800">
+                  {formError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={formSubmitting}
+                className={`px-6 py-3 font-semibold rounded-lg transition-all ${
+                  formSubmitting
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white hover:shadow-lg'
+                }`}
+              >
+                {formSubmitting ? 'Creating...' : 'Create Customer'}
+              </button>
+            </form>
+          </div>
+        )}
+
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="inline-block w-10 h-10 border-4 border-gray-200 border-t-[#00D4FF] rounded-full animate-spin" />
+            <p className="mt-4 text-gray-600">Loading customers...</p>
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+            <p className="text-red-800 font-semibold">Error: {error}</p>
+            <button
+              onClick={fetchCustomers}
+              className="mt-4 px-6 py-2 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+            >
+              Retry
+            </button>
+          </div>
+        ) : customers.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 shadow-sm text-center">
+            <p className="text-xl text-gray-600">No customers yet</p>
+            <p className="mt-2 text-gray-500">
+              Click "Add Customer" to create your first customer
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="px-6 py-4 text-left font-semibold text-gray-700 border-b-2 border-gray-200">Name</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-700 border-b-2 border-gray-200">Email</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-700 border-b-2 border-gray-200">Phone</th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-700 border-b-2 border-gray-200">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customers.map((customer) => (
+                  <tr key={customer.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4">{customer.name}</td>
+                    <td className="px-6 py-4">{customer.email}</td>
+                    <td className="px-6 py-4">{customer.phone || '-'}</td>
+                    <td className="px-6 py-4">
+                      {new Date(customer.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-    </div>
+    </AuthenticatedLayout>
   );
 }
