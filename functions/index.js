@@ -25,6 +25,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Apply authentication middleware to all /api routes except health check
+// TODO: Add rate limiting to prevent brute force attacks on authentication
 app.use('/api', (req, res, next) => {
   // Skip auth for health check
   if (req.path === '/health') {

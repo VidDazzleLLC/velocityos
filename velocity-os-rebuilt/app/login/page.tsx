@@ -12,6 +12,11 @@ import {
 import { auth } from '@/lib/firebase';
 import { setAuthCookie, clearAuthCookie } from '@/lib/auth';
 
+// TODO: Add email verification flow after signup
+// TODO: Implement password reset functionality
+// TODO: Add two-factor authentication (2FA) option
+// TODO: Add "Remember me" checkbox for extended sessions
+
 export default function LoginPage() {
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
