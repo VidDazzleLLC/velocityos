@@ -9,14 +9,14 @@ export async function loginTestUser(page: Page, userEmail?: string, userPassword
   const email = userEmail || testUser.email;
   const password = userPassword || testUser.password;
 
-  await page.goto('/login');
+  await page.goto('/');
   
   // Wait for the login form to be visible
   await page.waitForLoadState('networkidle');
   
-  // Fill in login credentials
-  await page.fill('input[name="email"], input[type="email"]', email);
-  await page.fill('input[name="password"], input[type="password"]', password);
+  // Fill in login credentials - the current HTML uses type selectors
+  await page.fill('input[type="email"]', email);
+  await page.fill('input[type="password"]', password);
   
   // Submit the form
   await page.click('button[type="submit"]');

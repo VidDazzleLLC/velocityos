@@ -93,7 +93,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: process.env.CI ? undefined : {
-    command: 'cd velocity-os-rebuilt && npm run dev',
+    command: 'npm run dev',
     url: 'http://localhost:3000',
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,

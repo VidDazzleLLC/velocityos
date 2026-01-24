@@ -56,21 +56,10 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Install frontend dependencies
-        working-directory: velocity-os-rebuilt
-        run: npm ci
-
-      - name: Build frontend
-        working-directory: velocity-os-rebuilt
-        run: |
-          npm run build
-          npm run export
-
-      - name: Start frontend server
-        working-directory: velocity-os-rebuilt
+      - name: Start Express server
         run: |
           npm run start &
-          echo "Waiting for frontend to be ready..."
+          echo "Waiting for server to be ready..."
           npx wait-on http://localhost:3000 -t 60000
         env:
           CI: true
