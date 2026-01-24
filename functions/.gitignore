@@ -1,6 +1,37 @@
+# Firebase Functions .gitignore
+
+# Compiled JavaScript files
+lib/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Dependency directories
 node_modules/
-npm-debug.log
+
+# Test coverage
+coverage/
+
+# Environment files
+.env
+.env.local
+
+# Firebase cache
+.firebase/
+
+# Logs
+*.log
+npm-debug.log*
 firebase-debug.log
 firebase-debug.*.log
-*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Runtime config
 .runtimeconfig.json
+*.local

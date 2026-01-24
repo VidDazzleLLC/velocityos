@@ -4,13 +4,16 @@
   "description": "Firebase Cloud Functions for VelocityOS API Gateway",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "echo 'No build needed for JavaScript'",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "validate": "node validate.js",
-    "list-routes": "node list-routes.js"
+    "list-routes": "node list-routes.js",
+    "test": "echo \"no backend tests yet\" && exit 0"
   },
   "engines": {
     "node": "18 || 20"
@@ -22,7 +25,13 @@
     "firebase-functions": "^6.1.1"
   },
   "devDependencies": {
-    "firebase-functions-test": "^3.1.0"
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.29.0",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.2.0"
   },
   "private": true
 }
