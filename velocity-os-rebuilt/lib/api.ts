@@ -20,6 +20,8 @@ export class ApiClient {
 
   constructor() {
     // Use environment variable or default to /api for same-origin requests
+    // Note: /api works in production because Firebase Hosting rewrites /api/** to Cloud Functions
+    // For local development with emulator, set NEXT_PUBLIC_API_URL in .env.local
     this.baseUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
   }
 
