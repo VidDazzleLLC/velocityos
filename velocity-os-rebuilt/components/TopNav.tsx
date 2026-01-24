@@ -27,7 +27,7 @@ export default function TopNav() {
           <span className="text-xl">🔔</span>
         </button>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center text-white font-semibold">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#7B61FF] to-[#00D4FF] flex items-center justify-center text-white font-semibold">
             JD
           </div>
           <div className="hidden md:block">

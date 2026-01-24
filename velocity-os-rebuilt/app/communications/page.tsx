@@ -12,7 +12,7 @@ export default function CommunicationsPage() {
     <AuthenticatedLayout>
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Communications</h1>
-        <button className="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+        <button className="px-6 py-3 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
           + New Campaign
         </button>
       </div>
@@ -55,7 +55,7 @@ export default function CommunicationsPage() {
               )}
             </div>
 
-            <button className="w-full py-2 border-2 border-[#667eea] text-[#667eea] font-medium rounded-lg hover:bg-[#667eea] hover:text-white transition-all">
+            <button className="w-full py-2 border-2 border-[#00D4FF] text-[#00D4FF] font-medium rounded-lg hover:bg-[#00D4FF] hover:text-white transition-all">
               View Details
             </button>
           </div>
@@ -67,7 +67,7 @@ export default function CommunicationsPage() {
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Message Templates</h2>
         <div className="text-center py-8 text-gray-500">
           <p className="mb-2">No message templates yet</p>
-          <button className="mt-4 px-6 py-2 border-2 border-[#667eea] text-[#667eea] font-medium rounded-lg hover:bg-[#667eea] hover:text-white transition-all">
+          <button className="mt-4 px-6 py-2 border-2 border-[#00D4FF] text-[#00D4FF] font-medium rounded-lg hover:bg-[#00D4FF] hover:text-white transition-all">
             Create Template
           </button>
         </div>

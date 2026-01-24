@@ -13,7 +13,7 @@ export default function CustomersPage() {
     <AuthenticatedLayout>
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Customers</h1>
-        <button className="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+        <button className="px-6 py-3 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
           + Add Customer
         </button>
       </div>
@@ -47,7 +47,7 @@ export default function CustomersPage() {
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-800">{customer.value}</td>
                   <td className="px-6 py-4 text-sm">
-                    <button className="text-[#667eea] hover:text-[#764ba2] font-medium">
+                    <button className="text-[#00D4FF] hover:text-[#7B61FF] font-medium">
                       View Details
                     </button>
                   </td>
