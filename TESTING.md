@@ -241,7 +241,6 @@ For production deployment:
 # Build frontend
 cd velocity-os-rebuilt
 npm run build
-npm run export
 
 # Deploy to Firebase
 cd ..

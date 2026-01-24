@@ -129,16 +129,27 @@ firebase emulators:start
 # Build frontend
 cd velocity-os-rebuilt
 npm run build
-npm run export
 ```
 
 #### Deploy to Staging:
 ```bash
+# Build frontend first
+cd velocity-os-rebuilt
+npm run build
+
+# Then deploy
+cd ..
 firebase deploy --project default
 ```
 
 #### Deploy to Production:
 ```bash
+# Build frontend first
+cd velocity-os-rebuilt
+npm run build
+
+# Then deploy
+cd ..
 firebase deploy --project prod
 ```
 
