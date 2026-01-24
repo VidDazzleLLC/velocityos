@@ -198,7 +198,7 @@ git add package-lock.json
 
 **For this repository:**
 - Root: `/package-lock.json`
-- Frontend: `/velocity-os-rebuilt/package-lock.json`  
+- Frontend: `/velocity-os-rebuilt/package-lock.json`
 - Backend: `/functions/package-lock.json`
 
 Apply the conflict resolution to the specific directory where conflicts occur.
