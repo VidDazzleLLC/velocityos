@@ -9,8 +9,12 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#667eea',
-          dark: '#764ba2',
+          DEFAULT: '#00D4FF',  // Evolve cyan/turquoise
+          dark: '#7B61FF',      // Evolve purple
+        },
+        evolve: {
+          cyan: '#00D4FF',
+          purple: '#7B61FF',
         },
       },
     },

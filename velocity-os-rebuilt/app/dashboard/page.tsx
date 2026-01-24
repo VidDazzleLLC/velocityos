@@ -4,7 +4,7 @@ export default function DashboardPage() {
   return (
     <AuthenticatedLayout>
       {/* AI Insight Banner */}
-      <div className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white p-6 rounded-xl mb-8">
+      <div className="bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white p-6 rounded-xl mb-8">
         <h4 className="text-lg font-semibold mb-2">🤖 AI Insight</h4>
         <p className="text-white/90">
           Your conversion rate is up 15% this week. Consider scaling your marketing budget on high-performing campaigns.
@@ -82,13 +82,13 @@ export default function DashboardPage() {
           <h3 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h3>
           
           <div className="space-y-3">
-            <button className="w-full py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+            <button className="w-full py-3 bg-gradient-to-r from-[#7B61FF] to-[#00D4FF] text-white font-semibold rounded-lg hover:shadow-lg transition-all">
               Create Task
             </button>
-            <button className="w-full py-3 border-2 border-[#667eea] text-[#667eea] font-semibold rounded-lg hover:bg-[#667eea] hover:text-white transition-all">
+            <button className="w-full py-3 border-2 border-[#00D4FF] text-[#00D4FF] font-semibold rounded-lg hover:bg-[#00D4FF] hover:text-white transition-all">
               AI Report
             </button>
-            <button className="w-full py-3 border-2 border-[#667eea] text-[#667eea] font-semibold rounded-lg hover:bg-[#667eea] hover:text-white transition-all">
+            <button className="w-full py-3 border-2 border-[#00D4FF] text-[#00D4FF] font-semibold rounded-lg hover:bg-[#00D4FF] hover:text-white transition-all">
               Export Data
             </button>
           </div>
