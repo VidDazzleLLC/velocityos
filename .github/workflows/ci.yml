@@ -37,3 +37,57 @@ jobs:
           else
             echo "No functions/package.json found, skipping functions tests/build"
           fi
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Install frontend dependencies
+        working-directory: velocity-os-rebuilt
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: velocity-os-rebuilt
+        run: |
+          npm run build
+          npm run export
+
+      - name: Start frontend server
+        working-directory: velocity-os-rebuilt
+        run: |
+          npm run start &
+          echo "Waiting for frontend to be ready..."
+          npx wait-on http://localhost:3000 -t 60000
+        env:
+          CI: true
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          TEST_BASE_URL: http://localhost:3000
+          TEST_USER_EMAIL: test@velocityos.test
+          TEST_USER_PASSWORD: TestPassword123!
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: |
+            e2e/test-results/
+            playwright-report/
+          retention-days: 30
