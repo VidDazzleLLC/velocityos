@@ -5,6 +5,8 @@ import { auth } from './firebase';
  * @returns Promise<string | null> - The ID token or null if no user is signed in
  */
 export async function getIdToken(): Promise<string | null> {
+  if (!auth) return null;
+  
   const user = auth.currentUser;
   if (!user) return null;
   

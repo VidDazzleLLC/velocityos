@@ -27,6 +27,11 @@ export default function LoginPage() {
     setError('');
     setSuccess('');
 
+    if (!auth) {
+      setError('Firebase is not initialized. Please check your configuration.');
+      return;
+    }
+
     // Validation
     if (!email || !password) {
       setError('Please fill in all fields');
@@ -102,6 +107,12 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     setError('');
     setSuccess('');
+    
+    if (!auth) {
+      setError('Firebase is not initialized. Please check your configuration.');
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -137,7 +148,9 @@ export default function LoginPage() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      if (auth) {
+        await signOut(auth);
+      }
       await clearAuthCookie();
       setSuccess('Logged out successfully');
     } catch (err: any) {
@@ -291,7 +304,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {auth.currentUser && (
+        {auth?.currentUser && (
           <div className="pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-600 mb-2">
               Logged in as: {auth.currentUser.email}

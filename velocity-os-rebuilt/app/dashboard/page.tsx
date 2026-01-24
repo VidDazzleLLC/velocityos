@@ -10,7 +10,9 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      if (auth) {
+        await signOut(auth);
+      }
       await clearAuthCookie();
       router.push('/login');
     } catch (error) {
@@ -43,7 +45,7 @@ export default function DashboardPage() {
           
           <div className="mt-6 space-y-2">
             <p className="text-sm text-gray-500">
-              User: {auth.currentUser?.email || 'Loading...'}
+              User: {auth?.currentUser?.email || 'Loading...'}
             </p>
           </div>
         </div>

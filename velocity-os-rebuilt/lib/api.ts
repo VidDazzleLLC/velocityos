@@ -11,13 +11,20 @@ export async function fetchWithAuth(
 ): Promise<Response> {
   const token = await getIdToken();
   
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
   };
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  // Merge with any additional headers from options
+  if (options.headers) {
+    const optHeaders = new Headers(options.headers);
+    optHeaders.forEach((value, key) => {
+      headers[key] = value;
+    });
   }
 
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;

@@ -10,7 +10,9 @@ export default function CustomersPage() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      if (auth) {
+        await signOut(auth);
+      }
       await clearAuthCookie();
       router.push('/login');
     } catch (error) {
