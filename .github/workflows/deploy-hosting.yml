@@ -26,7 +26,6 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm run export
       
       - name: Install Firebase Tools
         run: npm install -g firebase-tools
