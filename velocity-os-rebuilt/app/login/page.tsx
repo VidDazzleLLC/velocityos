@@ -8,9 +8,16 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  OAuthProvider,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { setAuthCookie, clearAuthCookie } from '@/lib/auth';
+import { 
+  createGoogleWorkspaceProvider, 
+  storeGoogleWorkspaceTokens,
+  isFirstTimeGoogleLogin,
+  GOOGLE_WORKSPACE_SCOPES 
+} from '@/lib/googleWorkspace';
 
 // TODO: Add email verification flow after signup
 // TODO: Implement password reset functionality
@@ -26,6 +33,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showWorkspaceInfo, setShowWorkspaceInfo] = useState(false);
 
   const handleEmailPasswordAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,7 +117,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleWorkspaceSignIn = async () => {
     setError('');
     setSuccess('');
     
@@ -121,17 +129,46 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const provider = new GoogleAuthProvider();
+      // Create Google Workspace provider with all required scopes
+      const provider = createGoogleWorkspaceProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
-      // Get ID token and set cookie
+      // Get the OAuth credential from the result
+      const credential = GoogleAuthProvider.credentialFromResult(userCredential);
+      
+      if (!credential) {
+        throw new Error('No credential returned from Google sign-in');
+      }
+
+      // Check if this is a first-time login
+      const isFirstTime = await isFirstTimeGoogleLogin(userCredential.user.uid);
+      
+      if (isFirstTime) {
+        setSuccess('Welcome! Setting up your Google Workspace integration...');
+      }
+
+      // Store Google Workspace tokens in Firestore
+      await storeGoogleWorkspaceTokens(
+        userCredential.user.uid,
+        credential,
+        userCredential.user.email || ''
+      );
+
+      // Get ID token and set auth cookie
       const token = await userCredential.user.getIdToken();
       await setAuthCookie(token);
 
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Show success message for first-time users
+      if (isFirstTime) {
+        setSuccess('Google Workspace connected! Gmail, Calendar, Drive, and Contacts are now integrated.');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
-      console.error('Google sign-in error:', err);
+      console.error('Google Workspace sign-in error:', err);
       
       switch (err.code) {
         case 'auth/popup-blocked':
@@ -144,7 +181,7 @@ export default function LoginPage() {
           // User closed the popup, no need to show error
           break;
         default:
-          setError(err.message || 'An error occurred during Google sign-in');
+          setError(err.message || 'An error occurred during Google Workspace sign-in');
       }
     } finally {
       setLoading(false);
@@ -264,10 +301,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div>
+        <div className="space-y-3">
           <button
             type="button"
-            onClick={handleGoogleSignIn}
+            onClick={handleGoogleWorkspaceSignIn}
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
@@ -289,8 +326,32 @@ export default function LoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Sign in with Google
+            Sign in with Google Workspace
           </button>
+          
+          <button
+            type="button"
+            onClick={() => setShowWorkspaceInfo(!showWorkspaceInfo)}
+            className="w-full text-xs text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {showWorkspaceInfo ? 'Hide' : 'Why Google Workspace?'}
+          </button>
+
+          {showWorkspaceInfo && (
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-3 text-xs text-gray-700">
+              <p className="font-semibold mb-2">Google Workspace Integration Includes:</p>
+              <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <li>📧 Gmail - Read and send emails</li>
+                <li>📅 Calendar - View and manage events</li>
+                <li>📁 Drive - Access and manage files</li>
+                <li>👥 Contacts - Sync your contacts</li>
+              </ul>
+              <p className="mt-2 text-gray-500">Your data is securely stored and only used within VelocityOS.</p>
+            </div>
+          )}
         </div>
 
         <div className="text-center">
