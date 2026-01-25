@@ -167,7 +167,7 @@ jobs:
 
       - name: Start Express server
         run: |
-          npm run start &
+          npm run dev &
           echo "Waiting for server to be ready..."
           npx wait-on http://localhost:3000 -t 60000
         env:
