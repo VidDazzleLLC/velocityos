@@ -16,7 +16,8 @@ import {
   createGoogleWorkspaceProvider, 
   storeGoogleWorkspaceTokens,
   isFirstTimeGoogleLogin,
-  GOOGLE_WORKSPACE_SCOPES 
+  GOOGLE_WORKSPACE_SCOPES,
+  storeAIAutonomousConfig
 } from '@/lib/googleWorkspace';
 
 // TODO: Add email verification flow after signup
@@ -129,7 +130,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Create Google Workspace provider with all required scopes
+      // Create Google Workspace provider with all required scopes for AI autonomous operations
       const provider = createGoogleWorkspaceProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
@@ -144,7 +145,7 @@ export default function LoginPage() {
       const isFirstTime = await isFirstTimeGoogleLogin(userCredential.user.uid);
       
       if (isFirstTime) {
-        setSuccess('Welcome! Setting up your Google Workspace integration...');
+        setSuccess('Welcome! Setting up your AI-powered autonomous business system...');
       }
 
       // Store Google Workspace tokens in Firestore
@@ -154,16 +155,29 @@ export default function LoginPage() {
         userCredential.user.email || ''
       );
 
+      // Enable AI Autonomous Mode for first-time users
+      if (isFirstTime) {
+        await storeAIAutonomousConfig(userCredential.user.uid, {
+          enabled: true,
+          workspaceEmail: userCredential.user.email || '',
+          automationLevel: 'full-autonomous',
+          backgroundJobsEnabled: true,
+          autoResponseEnabled: true,
+          autoSchedulingEnabled: true,
+          autoDocumentCreationEnabled: true,
+        });
+      }
+
       // Get ID token and set auth cookie
       const token = await userCredential.user.getIdToken();
       await setAuthCookie(token);
 
       // Show success message for first-time users
       if (isFirstTime) {
-        setSuccess('Google Workspace connected! Gmail, Calendar, Drive, and Contacts are now integrated.');
+        setSuccess('🤖 AI Autonomous Mode Activated! VelocityOS is now managing your business operations 24/7.');
         setTimeout(() => {
           router.push('/dashboard');
-        }, 2000);
+        }, 2500);
       } else {
         router.push('/dashboard');
       }
@@ -337,19 +351,22 @@ export default function LoginPage() {
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            {showWorkspaceInfo ? 'Hide' : 'Why Google Workspace?'}
+            {showWorkspaceInfo ? 'Hide' : 'How does AI Autonomous Mode work?'}
           </button>
 
           {showWorkspaceInfo && (
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3 text-xs text-gray-700">
-              <p className="font-semibold mb-2">Google Workspace Integration Includes:</p>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
-                <li>📧 Gmail - Read and send emails</li>
-                <li>📅 Calendar - View and manage events</li>
-                <li>📁 Drive - Access and manage files</li>
-                <li>👥 Contacts - Sync your contacts</li>
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-md p-4 text-xs text-gray-700">
+              <p className="font-semibold mb-2 text-sm">🤖 AI-Powered Autonomous Business Operations</p>
+              <p className="mb-3 text-gray-600">VelocityOS uses Gemini AI to run your business with ZERO human intervention:</p>
+              <ul className="list-disc list-inside space-y-1.5 text-gray-600 mb-3">
+                <li>📧 <strong>Gmail</strong> - AI reads, categorizes, and auto-responds to emails</li>
+                <li>📅 <strong>Calendar</strong> - AI schedules and manages meetings intelligently</li>
+                <li>📁 <strong>Drive</strong> - AI creates and organizes business documents</li>
+                <li>👥 <strong>Contacts</strong> - AI manages and categorizes customers</li>
+                <li>🎯 <strong>Decisions</strong> - AI analyzes data and executes actions</li>
+                <li>⚡ <strong>24/7 Operation</strong> - System runs autonomously around the clock</li>
               </ul>
-              <p className="mt-2 text-gray-500">Your data is securely stored and only used within VelocityOS.</p>
+              <p className="text-gray-500 italic">Your AI business partner that never sleeps.</p>
             </div>
           )}
         </div>
