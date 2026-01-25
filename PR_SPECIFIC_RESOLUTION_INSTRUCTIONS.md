@@ -293,17 +293,24 @@ git push origin copilot/firebase-auth-with-google-workspace --force
 ```bash
 # Check if auth is already implemented
 git checkout main
-grep -r "firebase auth" velocity-os-rebuilt/
-grep -r "signIn" velocity-os-rebuilt/app/
+# Look for Firebase auth imports and configuration
+grep -r "import.*firebase/auth" velocity-os-rebuilt/
+grep -r "signInWithPopup\|signInWithEmailAndPassword" velocity-os-rebuilt/
+# Look for auth context or components
+find velocity-os-rebuilt/ -name "*auth*" -o -name "*Auth*"
+
+# First, get the actual branch name for PR #7:
+gh pr view 7 --json headRefName -q .headRefName
 
 # If authentication is missing, rebase PR #7:
 git fetch origin
-git checkout copilot/firebase-auth-with-google-workspace  # (check actual branch name)
+# Replace BRANCH_NAME with the output from the gh command above
+git checkout BRANCH_NAME
 git rebase origin/main
 
 # Resolve conflicts if any
-# Then force push
-git push origin copilot/firebase-auth-with-google-workspace --force
+# Then force push (use the same branch name from above)
+git push origin BRANCH_NAME --force
 ```
 
 ## Step 5: Alternative - Merge Main into PRs
@@ -313,8 +320,12 @@ If rebasing is too complex, merge main into the PR branch instead:
 ### Example for PR #7:
 
 ```bash
+# First get the branch name
+BRANCH_NAME=$(gh pr view 7 --json headRefName -q .headRefName)
+
+# Checkout and merge
 git fetch origin
-git checkout copilot/firebase-auth-with-google-workspace
+git checkout $BRANCH_NAME
 git merge origin/main
 
 # Resolve conflicts:
@@ -325,7 +336,7 @@ git add <resolved-files>
 git commit -m "Merge main into Firebase auth PR"
 
 # Push (no force needed)
-git push origin copilot/firebase-auth-with-google-workspace
+git push origin $BRANCH_NAME
 ```
 
 ## Step 6: Verify Resolution

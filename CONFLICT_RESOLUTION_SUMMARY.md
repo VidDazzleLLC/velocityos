@@ -70,7 +70,12 @@ I've provided **three comprehensive documentation files** with specific instruct
 **Check first:** Does main already have authentication?
 ```bash
 git checkout main
-grep -r "firebase auth" velocity-os-rebuilt/
+# Check for Firebase auth imports and configuration
+grep -r "import.*firebase/auth" velocity-os-rebuilt/
+grep -r "signInWithPopup\|signInWithEmailAndPassword" velocity-os-rebuilt/
+grep -r "getAuth\|onAuthStateChanged" velocity-os-rebuilt/
+# Check for auth context or providers
+find velocity-os-rebuilt/ -name "*auth*" -o -name "*Auth*"
 ```
 
 **If authentication exists in main:** Close PR #7  
