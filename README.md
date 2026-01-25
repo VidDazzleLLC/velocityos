@@ -116,8 +116,13 @@ velocityos/
 │   ├── src/                # TypeScript source code
 │   │   └── index.ts        # Main API entry point
 │   └── package.json        # Backend dependencies
+├── e2e/                    # End-to-end tests
+│   ├── fixtures/           # Test helpers and utilities
+│   ├── tests/              # Test specifications
+│   └── README.md           # E2E testing documentation
 ├── public/                 # Legacy HTML files (for reference)
 ├── .github/workflows/      # CI/CD pipeline configurations
+├── scripts/                # Helper scripts
 ├── server.js               # Local development Express server
 ├── firebase.json           # Firebase configuration
 ├── .firebaserc             # Firebase project aliases
@@ -146,6 +151,44 @@ npm run lint        # Run ESLint
 ```bash
 # From root directory
 npm start           # Runs Express server with both frontend and API
+```
+
+### Testing
+
+#### End-to-End Tests
+
+VelocityOS includes comprehensive E2E tests using Playwright. See [e2e/README.md](e2e/README.md) for detailed documentation.
+
+**Quick Start:**
+
+```bash
+# Install dependencies
+npm install
+
+# Run E2E tests (starts server automatically)
+npm run test:e2e
+
+# Run tests in UI mode
+npm run test:e2e:ui
+
+# Debug tests
+npm run test:e2e:debug
+```
+
+**Test Coverage:**
+- Authentication flow (login/logout)
+- Dashboard analytics
+- Customer management
+- Campaign management
+- Complete end-to-end user flows
+
+#### Unit Tests
+
+```bash
+# Run all tests
+npm test                              # Root tests
+cd velocity-os-rebuilt && npm test   # Frontend tests
+cd functions && npm test              # Backend tests
 ```
 
 ### Firebase Emulator Suite
@@ -178,15 +221,6 @@ firebase deploy --project prod
 ### Automated Deployment
 
 Push to `main` branch triggers automatic deployment to staging via GitHub Actions.
-
-## Testing
-
-```bash
-# Run all tests
-npm test                              # Root tests
-cd velocity-os-rebuilt && npm test   # Frontend tests
-cd functions && npm test              # Backend tests
-```
 
 ## Environment Variables
 
@@ -228,6 +262,7 @@ The project uses GitHub Actions for continuous integration and deployment:
   - Runs linting and tests
   - Validates Firebase configuration
   
+- **E2E Tests**: Automated end-to-end testing
 - **Deploy Hosting**: Deploys frontend to Firebase Hosting
 - **Deploy Functions**: Deploys backend API to Cloud Functions
 
@@ -236,8 +271,13 @@ See [.github/workflows/README.md](.github/workflows/README.md) for details.
 ## Documentation
 
 - [Deployment Guide](DEPLOYMENT.md) - Complete deployment instructions
+- [Launch Checklist](LAUNCH_CHECKLIST.md) - Pre-launch verification steps
+- [Launch Status](LAUNCH_STATUS.md) - Current launch readiness
+- [Quick Reference](QUICK_REFERENCE.md) - Common commands and troubleshooting
 - [Firebase Setup](FIREBASE_SETUP.md) - Firebase configuration guide
+- [E2E Testing](e2e/README.md) - End-to-end testing documentation
 - [Workflow Guide](.github/workflows/README.md) - CI/CD documentation
+- [Scripts Guide](scripts/README.md) - Helper scripts documentation
 
 ## Troubleshooting
 
@@ -284,6 +324,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for more troubleshooting tips.
 - **CI/CD**: GitHub Actions
 
 ### Development Tools
+- **Testing**: Playwright (E2E)
 - **Linting**: ESLint
 - **Type Checking**: TypeScript
 - **Package Manager**: npm
@@ -294,7 +335,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## Support
 
-- **Documentation**: Check the `/docs` folder
+- **Documentation**: Check the documentation files listed above
 - **Issues**: [GitHub Issues](https://github.com/VidDazzleLLC/velocityos/issues)
 - **Email**: support@viddazzle.com
 
