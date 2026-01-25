@@ -45,6 +45,43 @@ The E2E test suite covers the following scenarios:
    - End-to-end flow combining all features
    - Login → Dashboard → Customers → Campaigns → Logout
 
+6. **Google OAuth Authentication** (`google-oauth.spec.ts`)
+   - Google sign-in button display
+   - OAuth flow initiation
+   - OAuth completion and redirect
+   - OAuth cancellation handling
+   - OAuth error handling
+
+7. **Google Workspace Sync** (`workspace-sync.spec.ts`)
+   - Gmail integration and sync
+   - Google Calendar event synchronization
+   - Google Drive file management
+   - Cross-service unified dashboard
+
+8. **Google Pay Integration** (`google-pay.spec.ts`)
+   - Payment settings navigation
+   - Google Pay transaction initiation
+   - Payment completion flow
+   - Payment cancellation handling
+   - Payment history and methods
+
+9. **Google Voice Integration** (`google-voice.spec.ts`)
+   - Google Voice account connection
+   - Call history display
+   - Outbound call initiation
+   - Voicemail management
+   - SMS messaging
+   - Call forwarding configuration
+
+10. **Gemini AI Integration** (`gemini-ai.spec.ts`)
+    - AI chat interface
+    - Message sending and response
+    - Email composition assistance
+    - Customer insights generation
+    - Campaign idea generation
+    - Data analysis
+    - Document summarization
+
 ## Prerequisites
 
 Before running the E2E tests, ensure you have:
@@ -59,6 +96,11 @@ Before running the E2E tests, ensure you have:
    - Email: `test@velocityos.test`
    - Password: `TestPassword123!`
    - Or configure your own credentials in `.env.test`
+
+5. **Google Workspace Test Account** (for Google integration tests)
+   - Gmail account for OAuth testing
+   - Google Voice number (optional)
+   - Google Cloud project with APIs enabled
 
 ## Installation
 
@@ -79,6 +121,8 @@ Before running the E2E tests, ensure you have:
 
 ## Environment Configuration
 
+### Basic Configuration
+
 1. Copy the example environment file:
    ```bash
    cp .env.test.example .env.test
@@ -96,6 +140,34 @@ Before running the E2E tests, ensure you have:
    - Go to Firebase Console → Authentication
    - Add a user with the credentials from `.env.test`
    - Or use Firebase emulators for local testing
+
+### Google Workspace Configuration (Optional)
+
+For testing Google Workspace integrations (OAuth, Gmail, Calendar, Drive, Voice, Pay):
+
+1. Add Google test credentials to `.env.test`:
+   ```env
+   TEST_GOOGLE_EMAIL=your-test-gmail@gmail.com
+   TEST_GOOGLE_PASSWORD=your-test-password
+   TEST_GOOGLE_WORKSPACE_DOMAIN=example.com
+   ```
+
+2. Enable required Google APIs in Google Cloud Console:
+   - Gmail API
+   - Google Calendar API
+   - Google Drive API
+   - Google Pay API (for payment tests)
+   - Google Voice API (if available)
+
+3. Configure OAuth consent screen and test users
+
+4. Add Gemini AI credentials:
+   ```env
+   TEST_GEMINI_API_KEY=your-gemini-api-key
+   TEST_GEMINI_MODEL=gemini-pro
+   ```
+
+**Note**: Most Google Workspace tests are marked as `.skip()` and require full OAuth implementation to run. They serve as templates for future integration testing.
 
 ## Running Tests Locally
 
