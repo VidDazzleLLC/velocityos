@@ -27,6 +27,13 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "⚠️  FIREBASE_TOKEN secret not configured. Skipping deployment."
+            echo "ℹ️  To enable Firebase deployments, add FIREBASE_TOKEN to repository secrets:"
+            echo "   1. Run: firebase login:ci"
+            echo "   2. Add the token to Settings → Secrets and variables → Actions"
+            exit 0
+          fi
           if command -v firebase >/dev/null 2>&1; then
             firebase deploy --only hosting --token "$FIREBASE_TOKEN"
           else
