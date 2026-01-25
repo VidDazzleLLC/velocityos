@@ -16,9 +16,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 # Set minimal permissions for security
 permissions:
@@ -35,7 +35,7 @@ jobs:
   root:
     name: Root - Build & Test
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -61,7 +61,7 @@ jobs:
   frontend:
     name: Frontend - Build & Test
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -103,7 +103,7 @@ jobs:
   backend:
     name: Backend - Build & Test
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
     name: E2E Tests
     runs-on: ubuntu-latest
     needs: [root, frontend, backend]
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -191,20 +191,20 @@ jobs:
           retention-days: 30
 
   # ===========================================================================
-  # Job 5: Firebase Deployment Preparation (Dry-Run Only)
+  # Job 5: Firebase Configuration Validation
   # ===========================================================================
-  # This job only runs on pushes to main branch
-  # It validates Firebase configuration and prepares for deployment
-  # NOTE: This does NOT actually deploy - it's preparation and validation only
+  # This job validates Firebase configuration files
+  # Actual deployment is handled by separate deploy-hosting.yml and
+  # deploy-functions.yml workflows to avoid conflicts
   # ===========================================================================
-  firebase-prepare:
-    name: Firebase - Deployment Preparation
+  firebase-validate:
+    name: Firebase - Configuration Validation
     runs-on: ubuntu-latest
     # Only run on pushes to main (not on PRs)
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     # Wait for all build jobs to complete successfully
     needs: [root, frontend, backend]
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -227,10 +227,6 @@ jobs:
           name: backend-build
           path: functions/lib
 
-      # Install Firebase CLI tools
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
       # Validate Firebase configuration files
       - name: Validate firebase.json
         run: |
@@ -251,8 +247,7 @@ jobs:
           cat .firebaserc
           echo ".firebaserc found and valid"
 
-      # Validate deployment readiness (dry-run check)
-      - name: Check deployment readiness
+      - name: Validation Summary
         run: |
           echo "Checking deployment readiness..."
           echo ""
@@ -265,15 +260,14 @@ jobs:
           echo "  - .firebaserc exists"
           echo ""
           echo "============================================="
-          echo "Deployment Preparation Complete"
+          echo "Firebase Configuration Validation Complete"
           echo "============================================="
           echo ""
-          echo "The application is ready for deployment."
-          echo "To deploy to staging, use:"
-          echo "  firebase deploy --project default"
+          echo "Frontend: velocity-os-rebuilt/out"
+          echo "Backend: functions/lib"
           echo ""
-          echo "Note: Automatic deployment is disabled."
-          echo "Manual deployment is required for security."
+          echo "Note: Deployment will be handled by separate"
+          echo "deploy-hosting.yml and deploy-functions.yml workflows"
           echo "============================================="
 
   # ===========================================================================
@@ -285,7 +279,7 @@ jobs:
     # Always run this job, even if previous jobs fail
     if: always()
     needs: [root, frontend, backend, e2e-tests]
-    
+
     steps:
       - name: Check CI Status
         run: |
@@ -296,7 +290,7 @@ jobs:
           echo "Backend: ${{ needs.backend.result }}"
           echo "E2E Tests: ${{ needs.e2e-tests.result }}"
           echo ""
-          
+
           # Fail if any required job failed
           if [ "${{ needs.root.result }}" != "success" ] || \
              [ "${{ needs.frontend.result }}" != "success" ] || \
@@ -305,6 +299,5 @@ jobs:
             echo "One or more jobs failed. Please check the logs above."
             exit 1
           fi
-          
-          echo "All CI checks passed successfully!"
 
+          echo "All CI checks passed successfully!"
