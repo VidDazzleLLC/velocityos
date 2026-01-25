@@ -9,10 +9,21 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Disable caching for testing
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    next();
+});
+
 app.use(express.static('public'));
 
 // Routes
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'auth', 'login.html'));
+});
+
+app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'auth', 'login.html'));
 });
 
