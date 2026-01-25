@@ -17,6 +17,14 @@ VelocityOS is a next-gen AI business OS that automates routine work.
 - Node.js 18 or higher
 - npm or yarn
 
+### Quick Questions?
+
+See the [FAQ.md](FAQ.md) for common questions including:
+- **Where do I put the Firebase Token?**
+- How do I run VelocityOS locally?
+- How do I deploy to Firebase?
+- Troubleshooting common issues
+
 ### Installation
 
 ```bash
@@ -81,13 +89,45 @@ velocityos/
 └── README.md             # This file
 ```
 
+## Firebase Configuration
+
+VelocityOS uses Firebase for hosting and cloud functions. To enable deployments, you need to configure a Firebase Token.
+
+### Where to Put the Firebase Token
+
+The Firebase Token must be configured as a **GitHub Secret** to enable automated deployments via GitHub Actions.
+
+#### Step-by-Step Instructions:
+
+1. **Generate the Firebase Token** (requires [Firebase CLI](https://firebase.google.com/docs/cli)):
+   ```bash
+   firebase login:ci
+   ```
+   Copy the token that appears in your terminal.
+
+2. **Add the Token to GitHub**:
+   - Go to your GitHub repository
+   - Navigate to: **Settings** → **Secrets and variables** → **Actions**
+   - Click **"New repository secret"**
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+   - Click **"Add secret"**
+
+3. **Verify Setup**:
+   - Push to the `main` branch
+   - Check the **Actions** tab to see deployment workflows run successfully
+
+For detailed Firebase setup instructions, see [FIREBASE_SETUP.md](FIREBASE_SETUP.md).
+
+For deployment documentation, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## CI/CD
 
 The project uses GitHub Actions for continuous integration:
 
 - **Build & Test**: Runs on PRs and pushes to main/develop
 - **E2E Tests**: Automated end-to-end testing
-- **Deployment**: Automated deployment to production
+- **Deployment**: Automated deployment to production (requires `FIREBASE_TOKEN` secret)
 
 ## License
 

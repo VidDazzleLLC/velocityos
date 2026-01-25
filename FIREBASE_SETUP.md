@@ -2,6 +2,28 @@
 
 This guide provides step-by-step instructions to complete the Firebase integration for VelocityOS.
 
+## Quick Start: Where to Put the Firebase Token? 
+
+**The Firebase Token goes in GitHub Repository Secrets**, not in your code or `.env` files!
+
+### Instructions:
+
+1. **Generate the token locally:**
+   ```bash
+   firebase login:ci
+   ```
+
+2. **Add it to GitHub:**
+   - Go to: **GitHub Repository → Settings → Secrets and variables → Actions**
+   - Click **"New repository secret"**
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+   - Click **"Add secret"**
+
+That's it! GitHub Actions will now be able to deploy your app to Firebase.
+
+---
+
 ## Overview
 
 VelocityOS has been configured with:
@@ -42,17 +64,34 @@ If you haven't created Firebase projects yet:
 
 ### 3. Configure GitHub Secrets
 
-Add the following secrets to your GitHub repository:
+The `FIREBASE_TOKEN` secret is required for GitHub Actions to deploy to Firebase.
 
-#### Required for Staging Environment:
-Go to: Settings → Environments → staging → Add environment secret
+#### Quick Setup (Recommended):
+Add the token as a **Repository Secret** for simplicity:
 
-- `FIREBASE_TOKEN` - Get this by running `firebase login:ci` locally
+1. Generate token: `firebase login:ci`
+2. Go to: **Settings → Secrets and variables → Actions**
+3. Click **"New repository secret"**
+4. Name: `FIREBASE_TOKEN`
+5. Value: Paste the token
+6. Click **"Add secret"**
 
-#### Required for Production Environment:
-Create a production environment first, then add:
+#### Advanced Setup (Optional):
+For more control, you can use **GitHub Environments** instead:
 
-- `FIREBASE_TOKEN` - Same token or separate one for production
+**For Staging Environment:**
+1. Go to: **Settings → Environments → Create "staging"**
+2. Add environment secret: `FIREBASE_TOKEN`
+
+**For Production Environment:**
+1. Go to: **Settings → Environments → Create "production"**  
+2. Add environment secret: `FIREBASE_TOKEN`
+3. (Optional) Add protection rules:
+   - Required reviewers
+   - Wait timer
+   - Deployment branches: only `main`
+
+> **Note:** Repository secrets work for most use cases. Use environment secrets only if you need different tokens for staging vs production, or want deployment protection rules.
 
 ### 4. Configure Environment Variables for Cloud Functions
 
@@ -78,16 +117,7 @@ firebase functions:config:set crm.client_secret="your_client_secret" --project d
 
 Repeat for production using `--project prod`
 
-### 5. Create Production Environment in GitHub
-
-1. Go to: Settings → Environments → New environment
-2. Name it: `production`
-3. Add protection rules (optional but recommended):
-   - Required reviewers
-   - Wait timer
-   - Deployment branches: only `main`
-
-### 6. Create Cloud Functions Folder
+### 5. Create Cloud Functions Folder
 
 The `functions` folder doesn't exist yet. Create it:
 
@@ -113,7 +143,7 @@ app.get('/api/health', (req, res) => {
 exports.api = functions.https.onRequest(app);
 ```
 
-### 7. Test Deployment
+### 6. Test Deployment
 
 #### Local Testing:
 ```bash
@@ -193,8 +223,14 @@ Workflows are located in `.github/workflows/`:
 ## Troubleshooting
 
 ### Workflow Fails with "FIREBASE_TOKEN not found"
-- Add the secret to GitHub Environments (not Repository secrets)
-- Get token: `firebase login:ci`
+- Make sure you added the secret to GitHub repository settings
+- Path: **Settings → Secrets and variables → Actions → Repository secrets**
+- Verify the name is exactly `FIREBASE_TOKEN` (case-sensitive)
+- Get a new token: `firebase login:ci`
+
+If using GitHub Environments (advanced setup):
+- Ensure the secret is added to the correct environment
+- Verify your workflow references the right environment name
 
 ### "Functions not found" Error
 - Ensure `functions` folder exists with `index.js`
