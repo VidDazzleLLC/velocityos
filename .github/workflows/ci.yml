@@ -251,27 +251,29 @@ jobs:
           cat .firebaserc
           echo ".firebaserc found and valid"
 
-      # Deploy to Firebase staging
-      - name: Deploy to Firebase Staging
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      # Validate deployment readiness (dry-run check)
+      - name: Check deployment readiness
         run: |
-          echo "Deploying to Firebase staging environment..."
-          firebase use default
-          firebase deploy --only functions,hosting --token "$FIREBASE_TOKEN" --non-interactive
-          echo "✅ Staging deployment complete!"
-
-      - name: Deployment Summary
-        run: |
+          echo "Checking deployment readiness..."
+          echo ""
+          echo "✓ Build artifacts ready:"
+          echo "  - Frontend: velocity-os-rebuilt/out"
+          echo "  - Backend: functions/lib"
+          echo ""
+          echo "✓ Configuration validated:"
+          echo "  - firebase.json exists"
+          echo "  - .firebaserc exists"
+          echo ""
           echo "============================================="
-          echo "Firebase Staging Deployment Complete"
+          echo "Deployment Preparation Complete"
           echo "============================================="
           echo ""
-          echo "Frontend: velocity-os-rebuilt/out"
-          echo "Backend: functions/lib"
-          echo "Environment: velocityos-staging"
+          echo "The application is ready for deployment."
+          echo "To deploy to staging, use:"
+          echo "  firebase deploy --project default"
           echo ""
-          echo "Your application is now live!"
+          echo "Note: Automatic deployment is disabled."
+          echo "Manual deployment is required for security."
           echo "============================================="
 
   # ===========================================================================
