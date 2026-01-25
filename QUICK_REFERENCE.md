@@ -81,7 +81,7 @@ firebase deploy --only functions --project default
 ### Login
 ```bash
 firebase login
-firebase login:ci            # Get CI token
+firebase login:ci            # Get CI token (see MANUAL_TASKS.md for usage)
 ```
 
 ### Project Management

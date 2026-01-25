@@ -26,12 +26,8 @@ If you need to deploy manually:
 # 1. Ensure you have Firebase CLI installed
 npm install -g firebase-tools
 
-# 2. Login to Firebase
+# 3. Login to Firebase
 firebase login
-
-# 3. Set the Firebase token (if using CI/CD)
-export FIREBASE_TOKEN=$(firebase login:ci)
-
 # 4. Deploy to production
 firebase deploy --project prod --only hosting,functions
 ```
@@ -63,9 +59,11 @@ After deployment, verify:
 
 ## Required Secrets
 
+> **⚠️ ONE-TIME SETUP**: Only needs to be configured once per repository.
+
 Ensure the following secret is configured in GitHub:
-- **FIREBASE_TOKEN**: Obtain via `firebase login:ci`
-  - Add to: Settings → Secrets and variables → Actions → New repository secret
+- **FIREBASE_TOKEN**: See [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration) for setup instructions
+- **Quick check**: Go to Settings → Secrets and variables → Actions to verify
 
 ## Support
 

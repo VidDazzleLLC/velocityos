@@ -100,28 +100,13 @@ firebase deploy --project default
 
 ### 5. Configure GitHub Secrets for CI/CD
 
-To enable automatic deployments via GitHub Actions:
+> **⚠️ ONE-TIME SETUP**: GitHub secrets only need to be configured once per repository.
 
-#### Generate Firebase Token
+To enable automatic deployments via GitHub Actions, you need to configure the `FIREBASE_TOKEN` secret.
 
-```bash
-firebase login:ci
-# Copy the token that's generated
-```
+**For detailed setup instructions**, see [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration).
 
-#### Add GitHub Secrets
-
-1. Go to your GitHub repository
-2. Navigate to: Settings → Secrets and variables → Actions
-3. Add these secrets:
-   - `FIREBASE_TOKEN`: The token from `firebase login:ci`
-
-#### Create GitHub Environment
-
-1. Go to: Settings → Environments
-2. Create environment: `staging`
-3. Add environment secret: `FIREBASE_TOKEN`
-4. (Optional) Create `production` environment with protection rules
+**Quick verification**: Go to Settings → Secrets and variables → Actions and check if `FIREBASE_TOKEN` exists.
 
 ### 6. Deploy to Production
 

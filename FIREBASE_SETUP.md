@@ -42,17 +42,15 @@ If you haven't created Firebase projects yet:
 
 ### 3. Configure GitHub Secrets
 
-Add the following secrets to your GitHub repository:
+> **⚠️ ONE-TIME SETUP**: GitHub secrets only need to be configured once.
 
-#### Required for Staging Environment:
-Go to: Settings → Environments → staging → Add environment secret
+#### FIREBASE_TOKEN Secret (Repository-wide)
 
-- `FIREBASE_TOKEN` - Get this by running `firebase login:ci` locally
+The `FIREBASE_TOKEN` is required for automated deployments via GitHub Actions. This is a **repository-level secret** (not environment-specific) and only needs to be set up once.
 
-#### Required for Production Environment:
-Create a production environment first, then add:
+**For detailed setup instructions**, see [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration).
 
-- `FIREBASE_TOKEN` - Same token or separate one for production
+**Quick check**: Go to Settings → Secrets and variables → Actions. If `FIREBASE_TOKEN` is listed, you're all set!
 
 ### 4. Configure Environment Variables for Cloud Functions
 

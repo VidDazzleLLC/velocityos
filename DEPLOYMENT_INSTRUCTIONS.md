@@ -12,35 +12,17 @@ Both workflows now properly install the Firebase CLI before attempting deploymen
 
 ## Required Configuration: FIREBASE_TOKEN Secret
 
-To enable automatic deployments, you must configure the `FIREBASE_TOKEN` secret in your GitHub repository:
+> **⚠️ ONE-TIME SETUP**: The `FIREBASE_TOKEN` secret only needs to be configured once per repository.
 
-### Step 1: Generate Firebase Token
+**To check if already configured**:
+1. Go to your repository on GitHub
+2. Navigate to: **Settings → Secrets and variables → Actions**
+3. Look for `FIREBASE_TOKEN` in the list
+4. If it exists, ✅ skip to [Pull Request Status](#pull-request-status) section
 
-Run this command in your local terminal (requires Firebase CLI installed):
+**If not configured yet**, follow the detailed setup instructions in [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration).
 
-```bash
-firebase login:ci
-```
-
-This will:
-1. Open a browser window for Firebase authentication
-2. Generate a CI token
-3. Display the token in your terminal
-
-**Important**: Copy this token immediately - you cannot retrieve it again.
-
-### Step 2: Add Secret to GitHub Repository
-
-1. Navigate to your repository on GitHub
-2. Go to **Settings** → **Secrets and variables** → **Actions**
-3. Click **New repository secret**
-4. Name: `FIREBASE_TOKEN`
-5. Value: Paste the token from Step 1
-6. Click **Add secret**
-
-### Step 3: Verify Deployment
-
-Once the secret is configured:
+**After configuration**:
 1. Push a commit to the `main` branch
 2. Go to **Actions** tab in your repository
 3. Watch the deployment workflows run
