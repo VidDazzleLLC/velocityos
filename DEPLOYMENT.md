@@ -2,6 +2,33 @@
 
 This guide walks you through deploying VelocityOS to production.
 
+## ⚠️ Important: GitHub Actions Deployment Requirements
+
+**If you see CI/CD workflow failures**, this is likely because the `FIREBASE_TOKEN` secret is not configured.
+
+### Quick Fix for Workflow Failures
+
+1. **Generate a Firebase token:**
+   ```bash
+   firebase login:ci
+   ```
+   Copy the token that's generated.
+
+2. **Add the token to GitHub:**
+   - Go to your repository on GitHub
+   - Navigate to: **Settings → Secrets and variables → Actions**
+   - Click **New repository secret**
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+   - Click **Add secret**
+
+3. **Re-run the failed workflow:**
+   - Go to **Actions** tab
+   - Click on the failed workflow run
+   - Click **Re-run all jobs**
+
+Without this token, the deployment workflows will skip deployment but won't fail the build.
+
 ## Prerequisites
 
 Before deploying, ensure you have:
@@ -11,6 +38,7 @@ Before deploying, ensure you have:
 3. ✅ GitHub account with repository access
 4. ⬜ Firebase account with projects created
 5. ⬜ API keys for AI services (optional but recommended)
+6. ⬜ `FIREBASE_TOKEN` configured in GitHub Secrets (for CI/CD)
 
 ## Quick Start Deployment
 

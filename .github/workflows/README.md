@@ -95,13 +95,43 @@ The build command compiles TypeScript to JavaScript in the `lib/` directory.
 
 ## Enabling Firebase Deployment
 
-To enable automatic deployment to Firebase staging on main branch pushes:
+**⚠️ Important:** The deployment workflows (`deploy-functions.yml` and `deploy-hosting.yml`) require a `FIREBASE_TOKEN` secret to be configured.
 
-1. **Set up GitHub Secrets**:
-   - `FIREBASE_SERVICE_ACCOUNT`: Base64-encoded Firebase service account JSON
-   - `FIREBASE_PROJECT_ID`: Your Firebase project ID (e.g., `velocityos-staging`)
+### Quick Setup
 
-2. **Generate Service Account**:
+To enable automatic deployment to Firebase on main branch pushes:
+
+1. **Generate Firebase CI Token**:
+   ```bash
+   firebase login:ci
+   ```
+   Copy the token that's generated.
+
+2. **Add GitHub Secret**:
+   - Go to your repository on GitHub
+   - Navigate to: **Settings → Secrets and variables → Actions**
+   - Click **New repository secret**
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+   - Click **Add secret**
+
+3. **That's it!** The next push to `main` will automatically deploy.
+
+### What Happens Without the Token?
+
+Without `FIREBASE_TOKEN` configured:
+- ✅ Builds will still succeed
+- ✅ Tests will still run  
+- ⚠️ Deployment will be skipped with an informative message
+- ✅ Workflow will exit successfully (no failure)
+
+This allows the CI/CD pipeline to work for development without requiring Firebase access.
+
+### Alternative: Service Account (Advanced)
+
+For more granular control, you can use a Firebase service account instead:
+
+1. **Generate Service Account**:
    ```bash
    # In Firebase Console, go to Project Settings > Service Accounts
    # Generate new private key and download JSON file
@@ -110,8 +140,11 @@ To enable automatic deployment to Firebase staging on main branch pushes:
    base64 -i service-account.json | xclip   # Linux
    ```
 
-3. **Update Workflow**:
-   Uncomment the deployment steps in `.github/workflows/ci.yml` under the `firebase-prepare` job.
+2. **Add as GitHub Secret**:
+   - Name: `FIREBASE_SERVICE_ACCOUNT`
+   - Value: The base64-encoded JSON
+
+3. **Update workflow** to use service account authentication instead of token.
 
 ## Configuration Files
 

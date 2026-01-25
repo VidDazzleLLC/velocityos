@@ -27,6 +27,18 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "⚠️  FIREBASE_TOKEN secret is not configured."
+            echo "ℹ️  To enable automatic deployments:"
+            echo "   1. Run: firebase login:ci"
+            echo "   2. Copy the generated token"
+            echo "   3. Add it to GitHub: Settings → Secrets and variables → Actions"
+            echo "   4. Create a secret named: FIREBASE_TOKEN"
+            echo ""
+            echo "📖 See DEPLOYMENT.md for detailed instructions"
+            echo "✅ Build successful - deployment skipped (no token)"
+            exit 0
+          fi
           if command -v firebase >/dev/null 2>&1; then
             firebase deploy --only hosting --token "$FIREBASE_TOKEN"
           else
