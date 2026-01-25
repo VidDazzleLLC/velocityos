@@ -20,7 +20,7 @@ VelocityOS is a next-gen AI business OS that automates routine work.
 ### Quick Questions?
 
 See the [FAQ.md](FAQ.md) for common questions including:
-- **Where do I put the Firebase Token?**
+- Where do I put the Firebase Token?
 - How do I run VelocityOS locally?
 - How do I deploy to Firebase?
 - Troubleshooting common issues

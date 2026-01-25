@@ -208,7 +208,3 @@ If you encounter issues not covered in this FAQ:
    - Steps to reproduce
    - Error messages or screenshots
    - Your environment (OS, Node version, etc.)
-
----
-
-**Last Updated:** 2026-01-25
