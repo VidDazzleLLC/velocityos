@@ -95,16 +95,17 @@ test.describe('Dashboard Analytics', () => {
     
     // Check for common navigation elements
     const navPatterns = [
-      /customer/i,
-      /campaign/i,
-      /communication/i,
-      /settings/i,
-      /profile/i,
+      'customer',
+      'campaign',
+      'communication',
+      'settings',
+      'profile',
     ];
     
     let foundNav = false;
     for (const pattern of navPatterns) {
-      const navElements = await page.locator(`a:has-text("${pattern.source.replace(/[\/\\^$*+?.()|[\]{}]/g, '')}"), button:has-text("${pattern.source.replace(/[\/\\^$*+?.()|[\]{}]/g, '')}"), nav >> text=${pattern}`).count();
+      // Look for navigation elements with case-insensitive matching
+      const navElements = await page.locator(`a, button, nav a, [role="navigation"] a`).filter({ hasText: new RegExp(pattern, 'i') }).count();
       if (navElements > 0) {
         foundNav = true;
         break;
