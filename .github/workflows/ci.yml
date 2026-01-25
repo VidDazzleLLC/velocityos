@@ -251,35 +251,27 @@ jobs:
           cat .firebaserc
           echo ".firebaserc found and valid"
 
-      # TODO: Add Firebase authentication when secrets are configured
-      # For actual deployment, you'll need to set up these GitHub secrets:
-      # - FIREBASE_SERVICE_ACCOUNT: Base64-encoded service account JSON
-      # - FIREBASE_PROJECT_ID: Your Firebase project ID
-      #
-      # Example deployment command (currently commented out):
-      # - name: Deploy to Firebase (staging)
-      #   env:
-      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      #   run: |
-      #     firebase use velocityos-staging
-      #     firebase deploy --only functions,hosting --project velocityos-staging
+      # Deploy to Firebase staging
+      - name: Deploy to Firebase Staging
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          echo "Deploying to Firebase staging environment..."
+          firebase use default
+          firebase deploy --only functions,hosting --token "$FIREBASE_TOKEN" --non-interactive
+          echo "✅ Staging deployment complete!"
 
-      - name: Deployment Preparation Summary
+      - name: Deployment Summary
         run: |
           echo "============================================="
-          echo "Firebase Deployment Preparation Complete"
+          echo "Firebase Staging Deployment Complete"
           echo "============================================="
           echo ""
-          echo "Frontend build: velocity-os-rebuilt/out"
-          echo "Backend build: functions/lib"
+          echo "Frontend: velocity-os-rebuilt/out"
+          echo "Backend: functions/lib"
+          echo "Environment: velocityos-staging"
           echo ""
-          echo "To enable automatic deployment to staging:"
-          echo "1. Set up FIREBASE_SERVICE_ACCOUNT secret in GitHub"
-          echo "2. Set up FIREBASE_PROJECT_ID secret in GitHub"
-          echo "3. Uncomment deployment steps in this workflow"
-          echo ""
-          echo "Manual deployment can be done with:"
-          echo "  firebase deploy --only functions,hosting --project velocityos-staging"
+          echo "Your application is now live!"
           echo "============================================="
 
   # ===========================================================================
