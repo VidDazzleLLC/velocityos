@@ -98,9 +98,16 @@ firebase deploy --only functions --project prod
 
 ### Security Notes
 
-**Required Secret**:
-- `FIREBASE_TOKEN` must be configured in GitHub repository secrets
-- Obtain via: `firebase login:ci`
+**Required GitHub Secret**:
+- `FIREBASE_TOKEN` must be configured in GitHub repository secrets for automatic deployments
+- **To configure**:
+  1. Generate token: Run `firebase login:ci` in your terminal
+  2. Copy the token from the output
+  3. Go to GitHub repository → Settings → Secrets and variables → Actions
+  4. Click "New repository secret"
+  5. Name: `FIREBASE_TOKEN`
+  6. Value: Paste the token from step 2
+  7. Click "Add secret"
 
 **Environment Variables** (set in Firebase Console):
 - GEMINI_API_KEY (for AI features)
