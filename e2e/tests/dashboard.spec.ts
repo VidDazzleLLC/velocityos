@@ -93,19 +93,20 @@ test.describe('Dashboard Analytics', () => {
     await page.goto('/dashboard');
     await page.waitForLoadState('networkidle');
     
-    // Check for common navigation elements
-    const navPatterns = [
-      /customer/i,
-      /campaign/i,
-      /communication/i,
-      /settings/i,
-      /profile/i,
+    // Check for navigation elements that exist in the sidebar
+    // The dashboard has: Dashboard, Contacts, Analytics, AI Insights, Settings
+    const navItems = [
+      page.locator('.nav-item:has-text("Dashboard")'),
+      page.locator('.nav-item:has-text("Contacts")'),
+      page.locator('.nav-item:has-text("Analytics")'),
+      page.locator('.nav-item:has-text("Settings")'),
     ];
     
+    // At least one navigation item should be visible
     let foundNav = false;
-    for (const pattern of navPatterns) {
-      const navElements = await page.locator(`a:has-text("${pattern.source.replace(/[\/\\^$*+?.()|[\]{}]/g, '')}"), button:has-text("${pattern.source.replace(/[\/\\^$*+?.()|[\]{}]/g, '')}"), nav >> text=${pattern}`).count();
-      if (navElements > 0) {
+    for (const navItem of navItems) {
+      if (await navItem.count() > 0) {
+        await expect(navItem.first()).toBeVisible();
         foundNav = true;
         break;
       }

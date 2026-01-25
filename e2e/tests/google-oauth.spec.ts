@@ -12,25 +12,9 @@ test.describe('Google OAuth Authentication', () => {
     await page.goto('/login');
     await expect(page).toHaveURL(/.*login/);
     
-    // Check for Google OAuth button
-    const googleButtonSelectors = [
-      'button:has-text("Google")',
-      'button:has-text("Sign in with Google")',
-      'button:has-text("Continue with Google")',
-      '[data-testid="google-signin"]',
-    ];
-    
-    let foundGoogleButton = false;
-    for (const selector of googleButtonSelectors) {
-      if (await page.locator(selector).count() > 0) {
-        await expect(page.locator(selector).first()).toBeVisible();
-        foundGoogleButton = true;
-        break;
-      }
-    }
-    
-    // Button should exist (even if OAuth not fully configured)
-    expect(foundGoogleButton).toBe(true);
+    // Check for Google OAuth button - the login page has a "Google" button
+    const googleButton = page.locator('button.social-btn:has-text("Google")');
+    await expect(googleButton).toBeVisible();
   });
 
   // TODO: Implement when Google OAuth is configured
