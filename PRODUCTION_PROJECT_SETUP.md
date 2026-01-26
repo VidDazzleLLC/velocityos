@@ -109,9 +109,10 @@ If you prefer to keep a single environment instead of separate staging/productio
 - Simply use the "Deploy to Production" workflow when you want to deploy
 - Consider renaming the workflow to avoid confusion
 
-## Questions?
+## Additional Resources
 
-If you need help setting up the production environment, refer to:
-- `PRODUCTION_DEPLOYMENT_GUIDE.md` - Full deployment guide
-- `FIREBASE_SETUP.md` - Firebase configuration details
-- `DEPLOYMENT.md` - General deployment documentation
+For more information about deployment and Firebase setup:
+- [`PRODUCTION_DEPLOYMENT_GUIDE.md`](./PRODUCTION_DEPLOYMENT_GUIDE.md) - Full production deployment guide
+- [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md) - Firebase configuration details
+- [`DEPLOYMENT.md`](./DEPLOYMENT.md) - General deployment documentation
+- [`DEPLOY_TO_PRODUCTION.md`](./DEPLOY_TO_PRODUCTION.md) - Production deployment overview
