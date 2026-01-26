@@ -124,6 +124,7 @@ for i in "${!ENVIRONMENTS[@]}"; do
     print_header "Configuring ${ENV_NAME} Environment"
     
     # Set JWT_SECRET
+    # Note: Using stdin pipe is the Firebase CLI's standard method for non-interactive secret input
     print_info "Setting JWT_SECRET for ${ENV_NAME}..."
     if echo "$JWT_SECRET" | firebase functions:secrets:set JWT_SECRET --project "$PROJECT" --force; then
         print_success "JWT_SECRET configured for ${ENV_NAME}"

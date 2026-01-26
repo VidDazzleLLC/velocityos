@@ -66,10 +66,18 @@ fi
 
 # Get project ID from .firebaserc
 if [ -f ".firebaserc" ]; then
-    if [ "$PROJECT" == "prod" ]; then
-        PROJECT_ID=$(grep -A 1 '"prod"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+    # Use Python for robust JSON parsing (more reliable than grep/sed)
+    if command -v python3 &> /dev/null; then
+        PROJECT_ID=$(python3 -c "import json; f=open('.firebaserc'); data=json.load(f); print(data['projects']['$PROJECT'])" 2>/dev/null)
+    elif command -v python &> /dev/null; then
+        PROJECT_ID=$(python -c "import json; f=open('.firebaserc'); data=json.load(f); print(data['projects']['$PROJECT'])" 2>/dev/null)
     else
-        PROJECT_ID=$(grep -A 1 '"default"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+        # Fallback to grep/sed if Python not available
+        if [ "$PROJECT" == "prod" ]; then
+            PROJECT_ID=$(grep -A 1 '"prod"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+        else
+            PROJECT_ID=$(grep -A 1 '"default"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+        fi
     fi
     
     if [ -z "$PROJECT_ID" ]; then

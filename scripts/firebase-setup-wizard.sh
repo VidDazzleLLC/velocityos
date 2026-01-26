@@ -45,7 +45,11 @@ print_step() {
 }
 
 # Welcome message
-clear
+# Only clear screen in interactive mode (not in CI/CD)
+if [ -t 0 ]; then
+    clear
+fi
+
 print_header "${ROCKET} VelocityOS Firebase Setup Wizard"
 echo -e "${CYAN}This wizard will guide you through setting up Firebase for VelocityOS.${NC}"
 echo -e "${CYAN}The setup includes:${NC}"

@@ -116,7 +116,8 @@ jobs:
       - name: Get project ID
         id: project-id
         run: |
-          PROD_PROJECT=$(grep -A 1 '"prod"' .firebaserc | tail -n 1 | sed 's/.*: *"\(.*\)".*/\1/')
+          # Use Python for robust JSON parsing
+          PROD_PROJECT=$(python3 -c "import json; f=open('.firebaserc'); data=json.load(f); print(data['projects']['prod'])")
           echo "project_id=$PROD_PROJECT" >> $GITHUB_OUTPUT
       
       - name: Display deployment summary
