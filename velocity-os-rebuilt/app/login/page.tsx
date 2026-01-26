@@ -19,6 +19,7 @@ import {
   GOOGLE_WORKSPACE_SCOPES,
   storeAIAutonomousConfig
 } from '@/lib/googleWorkspace';
+import { queueDataImport } from '@/lib/dataImport';
 
 // TODO: Add email verification flow after signup
 // TODO: Implement password reset functionality
@@ -149,13 +150,23 @@ export default function LoginPage() {
       }
 
       // Store Google Workspace tokens in Firestore
+      const tokens = {
+        accessToken: credential.accessToken || '',
+        refreshToken: credential.secret,
+        expiresAt: Date.now() + 3600000,
+        scopes: GOOGLE_WORKSPACE_SCOPES,
+        email: userCredential.user.email || '',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      
       await storeGoogleWorkspaceTokens(
         userCredential.user.uid,
         credential,
         userCredential.user.email || ''
       );
 
-      // Enable AI Autonomous Mode for first-time users
+      // Enable AI Autonomous Mode and import data for first-time users
       if (isFirstTime) {
         await storeAIAutonomousConfig(userCredential.user.uid, {
           enabled: true,
@@ -166,6 +177,11 @@ export default function LoginPage() {
           autoSchedulingEnabled: true,
           autoDocumentCreationEnabled: true,
         });
+
+        // Queue background data import (emails, contacts, calendar, files)
+        await queueDataImport(userCredential.user.uid, tokens);
+        
+        setSuccess('🤖 AI Autonomous Mode Activated! Importing your Google Workspace data...');
       }
 
       // Get ID token and set auth cookie
@@ -174,10 +190,9 @@ export default function LoginPage() {
 
       // Show success message for first-time users
       if (isFirstTime) {
-        setSuccess('🤖 AI Autonomous Mode Activated! VelocityOS is now managing your business operations 24/7.');
         setTimeout(() => {
           router.push('/dashboard');
-        }, 2500);
+        }, 3000);
       } else {
         router.push('/dashboard');
       }
