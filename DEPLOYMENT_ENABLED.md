@@ -49,7 +49,9 @@ The Firebase deployment workflows have been successfully enabled and configured 
 ```
 
 **GitHub Secret Required**:
-- `FIREBASE_TOKEN`: ✅ Configured in repository settings
+- `FIREBASE_TOKEN`: ✅ Should be configured in repository settings
+- **Verify**: Go to Settings → Secrets and variables → Actions
+- **If not configured**: See [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration)
 
 **Node.js Version**: 20 (consistent across all workflows)
 
@@ -221,12 +223,9 @@ firebase hosting:releases:list --project default
 
 ### Deployment Fails with "Authentication Error"
 
-**Solution**: Regenerate and update `FIREBASE_TOKEN`
-```bash
-firebase login:ci
-# Copy the new token
-# Update in GitHub: Settings → Secrets → FIREBASE_TOKEN
-```
+**Solution**: The `FIREBASE_TOKEN` may have expired or needs to be regenerated.
+
+See [SECURITY_REMEDIATION.md](./SECURITY_REMEDIATION.md) for token rotation procedures, or [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration) for initial setup.
 
 ### Build Fails Before Deployment
 

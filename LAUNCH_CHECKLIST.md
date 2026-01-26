@@ -75,7 +75,7 @@ This checklist ensures all critical components are ready before launching Veloci
 ```
 
 ### GitHub Secrets
-- [ ] `FIREBASE_TOKEN` added to GitHub secrets (get with `firebase login:ci`)
+- [ ] `FIREBASE_TOKEN` added to GitHub secrets ([see setup guide](./MANUAL_TASKS.md#firebase_token-secret-configuration))
 - [ ] GitHub environment `staging` created
 - [ ] GitHub environment `production` created with protection rules
 - [ ] Secrets added to appropriate environments

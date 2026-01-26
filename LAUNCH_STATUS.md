@@ -147,20 +147,15 @@ firebase functions:secrets:set SESSION_SECRET --project prod
 - [ ] (Optional) Add AI API keys
 
 ### 4. Configure GitHub for CI/CD (5 minutes)
-```bash
-# Generate Firebase token
-firebase login:ci
 
-# Add to GitHub:
-# Settings → Secrets and variables → Actions
-# Add: FIREBASE_TOKEN
-```
+> **⚠️ ONE-TIME SETUP**: Only needs to be done once per repository.
+
+For detailed instructions, see [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration).
 
 **Actions needed**:
-- [ ] Generate Firebase CI token
+- [ ] Configure `FIREBASE_TOKEN` secret ([setup guide](./MANUAL_TASKS.md#firebase_token-secret-configuration))
 - [ ] Create GitHub environment: `staging`
 - [ ] Create GitHub environment: `production`
-- [ ] Add `FIREBASE_TOKEN` secret to both environments
 - [ ] (Optional) Add protection rules to production environment
 
 ### 5. First Deployment (2 minutes)

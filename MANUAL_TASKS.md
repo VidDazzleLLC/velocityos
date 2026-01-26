@@ -8,9 +8,17 @@ This document lists tasks that require manual intervention and cannot be complet
 
 **Status**: ⚠️ **REQUIRED** - Deployment workflows will fail without this secret
 
+> **⚠️ ONE-TIME SETUP**: This configuration only needs to be done **once**. If you've already added the `FIREBASE_TOKEN` secret to your GitHub repository, you can skip this section.
+
 The deployment workflows (`deploy-hosting.yml` and `deploy-functions.yml`) require a `FIREBASE_TOKEN` secret to be configured in the GitHub repository settings.
 
-**Steps to configure**:
+**To verify if already configured**:
+1. Go to your GitHub repository
+2. Navigate to: **Settings → Secrets and variables → Actions**
+3. Check if `FIREBASE_TOKEN` is listed under "Repository secrets"
+4. If it exists, ✅ you're done! If not, follow the steps below.
+
+**Steps to configure (first time only)**:
 1. Generate the token locally:
    ```bash
    firebase login:ci
@@ -22,7 +30,9 @@ The deployment workflows (`deploy-hosting.yml` and `deploy-functions.yml`) requi
 6. Value: Paste the token from step 2
 7. Click **"Add secret"**
 
-For more details, see the [DEPLOYMENT_READY.md](./DEPLOYMENT_READY.md) documentation.
+**When to regenerate**:
+- Only regenerate if the token expires or is compromised
+- See [SECURITY_REMEDIATION.md](./SECURITY_REMEDIATION.md) for token rotation procedures
 
 ## Pull Request Management
 

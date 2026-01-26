@@ -84,14 +84,13 @@ When this PR (`copilot/merge-branch-into-main`) is **merged to main**:
 ### For Repository Owner/Maintainer:
 
 1. **Verify Firebase Token**
-   ```bash
-   # If not already set, generate a token:
-   firebase login:ci
    
-   # Add to GitHub:
-   # Go to Settings → Secrets and variables → Actions
-   # Create new secret: FIREBASE_TOKEN
-   ```
+   > **⚠️ ONE-TIME SETUP**: Only needs to be configured once.
+   
+   Check if `FIREBASE_TOKEN` is already configured:
+   - Go to Settings → Secrets and variables → Actions
+   - If `FIREBASE_TOKEN` is listed, ✅ you're all set!
+   - If not, see [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration) for setup instructions
 
 2. **Merge this PR**
    - Review the changes (documentation only)

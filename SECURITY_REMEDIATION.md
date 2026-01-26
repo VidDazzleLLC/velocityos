@@ -1,5 +1,7 @@
 # Firebase Token Security Remediation Guide
 
+> **Note**: This guide is for **security incidents and token rotation**. For normal first-time setup, see [MANUAL_TASKS.md](./MANUAL_TASKS.md#firebase_token-secret-configuration).
+
 ## ⚠️ SECURITY ALERT
 
 A Firebase secret token was identified as being saved in GitHub. This document outlines the immediate remediation steps required.
