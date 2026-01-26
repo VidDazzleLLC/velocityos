@@ -1,5 +1,34 @@
 # CI/CD Workflow Documentation
 
+## ⚠️ CRITICAL: Firebase Deployment Setup
+
+**Before deployments can work, you MUST configure the `FIREBASE_TOKEN` secret.**
+
+### Quick Setup (Required)
+
+1. **Generate a Firebase CI token**:
+   ```bash
+   firebase login:ci
+   ```
+
+2. **Add to GitHub Secrets**:
+   - Go to: Settings → Secrets and variables → Actions → New repository secret
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+
+3. **Verify**:
+   - Push to `main` branch
+   - Check GitHub Actions - the workflow will validate the token is set
+
+**Without this secret, all deployments will fail with:**
+```
+Error: Failed to authenticate, have you run firebase login?
+```
+
+See [FIREBASE_SETUP.md](../../FIREBASE_SETUP.md) for detailed instructions.
+
+---
+
 ## Overview
 
 This repository includes a comprehensive CI/CD workflow that builds, tests, and validates all components of the VelocityOS application.
