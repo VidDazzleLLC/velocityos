@@ -30,11 +30,24 @@ jobs:
       - name: Install Firebase Tools
         run: npm install -g firebase-tools
 
+      - name: Setup Firebase Authentication
+        run: |
+          if [ -n "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" ]; then
+            echo "Using Service Account authentication..."
+            echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > $HOME/gcloud-key.json
+            echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-key.json" >> $GITHUB_ENV
+          elif [ -n "${{ secrets.FIREBASE_TOKEN }}" ]; then
+            echo "Using Firebase Token authentication..."
+            echo "FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}" >> $GITHUB_ENV
+          else
+            echo "ERROR: No Firebase authentication credentials found!"
+            echo "Please set either FIREBASE_SERVICE_ACCOUNT_KEY or FIREBASE_TOKEN secret in repository settings."
+            exit 1
+          fi
+
       - name: Deploy to Firebase Hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
           echo "Deploying to Firebase Hosting (staging)..."
           firebase use default
-          firebase deploy --only hosting --token "$FIREBASE_TOKEN" --non-interactive
+          firebase deploy --only hosting --non-interactive
           echo "✅ Deployment complete!"
