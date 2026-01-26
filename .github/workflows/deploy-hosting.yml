@@ -21,20 +21,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'velocity-os-rebuilt/package-lock.json'
 
-      - name: Install & build hosting (velocity-os-rebuilt)
+      - name: Install & build Hosting (velocity-os-rebuilt)
         working-directory: velocity-os-rebuilt
         run: |
           npm ci
           npm run build
 
-      - name: Install Firebase Tools
-        run: npm install -g firebase-tools
-
       - name: Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: |
-          echo "Deploying to Firebase Hosting (staging)..."
-          firebase use default
-          firebase deploy --only hosting --token "$FIREBASE_TOKEN" --non-interactive
-          echo "✅ Deployment complete!"
+          PROJECT_ID: default
