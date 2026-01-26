@@ -48,6 +48,10 @@ jobs:
           echo "✅ FIREBASE_TOKEN secret is configured"
 
       - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive
+        run: |
+          echo "Deploying Hosting to staging..."
+          firebase use default --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive
+          echo "✅ Deployment complete!"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
