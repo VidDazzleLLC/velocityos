@@ -17,9 +17,53 @@ GitHub Secrets are encrypted environment variables used in GitHub Actions workfl
 
 ### Required Repository Secret
 
-You need to add the `FIREBASE_TOKEN` secret to enable automated deployments.
+You need to add Firebase authentication credentials to enable automated deployments. VelocityOS workflows support two authentication methods:
 
-#### Step 1: Generate Firebase CI Token
+#### Option 1: Service Account Key (Recommended)
+
+**⭐ This is the modern, recommended approach** that works with all current and future versions of Firebase CLI.
+
+##### Step 1: Create Service Account in Firebase/Google Cloud Console
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Select your Firebase project
+3. Navigate to **IAM & Admin** → **Service Accounts**
+4. Click **Create Service Account**
+5. Set a name (e.g., "GitHub Actions Deploy")
+6. Click **Create and Continue**
+7. Grant these roles:
+   - **Firebase Admin** (or more specific roles like Firebase Hosting Admin, Cloud Functions Developer)
+8. Click **Continue** and then **Done**
+
+##### Step 2: Generate JSON Key
+
+1. Find your newly created service account in the list
+2. Click the three dots (⋮) → **Manage keys**
+3. Click **Add Key** → **Create new key**
+4. Choose **JSON** format
+5. Click **Create**
+6. The JSON key file will be downloaded to your computer
+
+##### Step 3: Add to GitHub Repository
+
+1. Go to your GitHub repository: `https://github.com/VidDazzleLLC/velocityos`
+2. Click on **Settings** tab (top right)
+3. In the left sidebar, click **Secrets and variables** → **Actions**
+4. Click **New repository secret** button
+5. Configure the secret:
+   - **Name**: `FIREBASE_SERVICE_ACCOUNT_KEY`
+   - **Secret**: Open the downloaded JSON file and copy its entire contents
+6. Click **Add secret**
+
+✅ The service account is now configured!
+
+---
+
+#### Option 2: Firebase Token (Legacy)
+
+**⚠️ Note:** This method is deprecated in Firebase CLI v11+ but still supported for backward compatibility. Use Option 1 (Service Account) for new setups.
+
+##### Step 1: Generate Firebase CI Token
 
 On your local machine, run:
 
@@ -43,23 +87,26 @@ Waiting for authentication...
 
 **Copy this token** - you'll need it for the next step.
 
-#### Step 2: Add Token to GitHub Repository
+##### Step 2: Add Token to GitHub Repository
 
 1. Go to your GitHub repository: `https://github.com/VidDazzleLLC/velocityos`
-
 2. Click on **Settings** tab (top right)
-
 3. In the left sidebar, click **Secrets and variables** → **Actions**
-
 4. Click **New repository secret** button
-
 5. Configure the secret:
    - **Name**: `FIREBASE_TOKEN`
    - **Secret**: Paste the token from Step 1
-   
 6. Click **Add secret**
 
-✅ The secret is now configured and will be available to all workflows.
+✅ The token is now configured and will be available to all workflows.
+
+---
+
+### Which Method to Use?
+
+- **New deployments**: Use **Option 1 (Service Account)** - it's more secure and future-proof
+- **Existing deployments**: Either update to Option 1, or continue using Option 2 (Firebase Token)
+- **Both can coexist**: The workflows will prefer Service Account if both are set
 
 ---
 
@@ -200,14 +247,16 @@ After completing all steps, verify your configuration:
 ### 1. Check Repository Secrets
 
 ```bash
-# Repository secrets should include:
-# - FIREBASE_TOKEN
+# Repository secrets should include at least ONE of:
+# - FIREBASE_SERVICE_ACCOUNT_KEY (recommended)
+# - FIREBASE_TOKEN (legacy, but still supported)
 ```
 
 Go to: Settings → Secrets and variables → Actions
 
-You should see:
-- ✅ `FIREBASE_TOKEN`
+You should see at least one of:
+- ✅ `FIREBASE_SERVICE_ACCOUNT_KEY` (recommended), OR
+- ✅ `FIREBASE_TOKEN` (legacy)
 
 ### 2. Check Environments
 
@@ -238,12 +287,38 @@ You should see:
 
 ## Troubleshooting
 
-### "Secret FIREBASE_TOKEN not found"
+### "Failed to authenticate, have you run firebase login?"
+
+This error means Firebase authentication credentials are missing or invalid.
+
+**Solution:**
+1. Verify you have added one of these secrets at: Settings → Secrets and variables → Actions
+   - `FIREBASE_SERVICE_ACCOUNT_KEY` (recommended), OR
+   - `FIREBASE_TOKEN` (legacy)
+2. Check the secret name is exactly correct (case-sensitive)
+3. For Service Account: Ensure the JSON key is valid and has proper permissions
+4. For Firebase Token: Regenerate the token with `firebase login:ci` if it's expired
+5. Re-run the workflow
+
+### "Secret FIREBASE_TOKEN not found" or "Secret FIREBASE_SERVICE_ACCOUNT_KEY not found"
 
 **Solution:**
 1. Verify secret is added at: Settings → Secrets and variables → Actions
-2. Name must be exactly: `FIREBASE_TOKEN` (case-sensitive)
+2. Name must be exactly: `FIREBASE_SERVICE_ACCOUNT_KEY` or `FIREBASE_TOKEN` (case-sensitive)
 3. Re-run the workflow
+
+### Deprecation warning about FIREBASE_TOKEN
+
+You may see warnings like:
+```
+⚠ Authenticating with FIREBASE_TOKEN is deprecated and will be removed in a future major version
+```
+
+**Solution:**
+This is expected if using the legacy `FIREBASE_TOKEN` method. The workflow still works, but for future compatibility:
+1. Create a service account (see Option 1 in GitHub Secrets Configuration above)
+2. Add `FIREBASE_SERVICE_ACCOUNT_KEY` secret to your repository
+3. The workflow will automatically prefer the service account over the token
 
 ### "Environment not found"
 
@@ -265,7 +340,8 @@ You should see:
 **Solution:**
 1. Check workflow permissions: Settings → Actions
 2. Ensure workflows have read access to repository
-3. For deployment, ensure `FIREBASE_TOKEN` is valid
+3. For Service Account: Ensure it has Firebase Admin or appropriate role permissions
+4. For Firebase Token: Ensure the token is still valid (they can expire)
 
 ---
 
@@ -273,10 +349,12 @@ You should see:
 
 ### Security
 
-- ✅ Use different Firebase tokens for staging and production
-- ✅ Rotate tokens periodically (every 90 days)
-- ✅ Never commit tokens to code
-- ✅ Use environment-specific secrets
+- ✅ **Prefer Service Account authentication** over legacy Firebase tokens
+- ✅ Use different credentials for staging and production (via environment secrets)
+- ✅ Rotate service account keys periodically (every 90 days)
+- ✅ Grant minimal required permissions to service accounts
+- ✅ Never commit credentials to code
+- ✅ Use environment-specific secrets for better isolation
 
 ### Deployment Safety
 
@@ -297,9 +375,11 @@ You should see:
 
 Before deploying, ensure:
 
-- [ ] `FIREBASE_TOKEN` secret added to repository
-- [ ] `staging` environment created
-- [ ] `production` environment created with protection rules
+- [ ] Firebase authentication configured (choose one):
+  - [ ] `FIREBASE_SERVICE_ACCOUNT_KEY` secret added (recommended), OR
+  - [ ] `FIREBASE_TOKEN` secret added (legacy)
+- [ ] `staging` environment created (optional)
+- [ ] `production` environment created with protection rules (optional)
 - [ ] `main` branch protection enabled
 - [ ] Workflow permissions configured
 - [ ] Test deployment workflow runs successfully
