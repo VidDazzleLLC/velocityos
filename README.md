@@ -1,21 +1,39 @@
-# VelocityOS
+# VelocityOS 🚀
 
 VelocityOS is a next-gen AI business OS that automates routine work.
 
-## Features
+## ✨ Features
 
 - **AI-Powered Automation**: Automate routine business tasks
 - **Unified Data**: Centralize your business data in one place
 - **Analytics Dashboard**: Track key business metrics
 - **Customer Management**: Manage customer relationships
 - **Campaign Tools**: Run marketing campaigns
+- **Firebase Integration**: Scalable cloud infrastructure
 
-## Getting Started
+## 🚀 Quick Start - Deploy to Firebase
+
+The fastest way to get VelocityOS up and running:
+
+```bash
+# 1. Run the setup wizard (installs dependencies, builds app, configures Firebase)
+./scripts/firebase-setup-wizard.sh
+
+# 2. Deploy to staging
+./scripts/deploy.sh
+
+# That's it! Your app is live! 🎉
+```
+
+**For detailed deployment instructions**, see [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md)
+
+## 💻 Local Development
 
 ### Prerequisites
 
 - Node.js 18 or higher
 - npm or yarn
+- Firebase CLI (optional, for deployment)
 
 ### Installation
 
@@ -29,7 +47,7 @@ npm run dev
 
 The application will be available at `http://localhost:3000`
 
-## Testing
+## 🧪 Testing
 
 ### End-to-End Tests
 
@@ -55,7 +73,7 @@ npm run test:e2e:ui
 - Campaign management
 - Complete end-to-end user flows
 
-## Development
+## 🛠️ Development
 
 ### Available Scripts
 
@@ -65,29 +83,69 @@ npm run test:e2e:ui
 - `npm run test:e2e:ui` - Run E2E tests with UI
 - `npm run test:e2e:debug` - Debug E2E tests
 
-## Project Structure
+### Deployment Scripts
+
+- `./scripts/firebase-setup-wizard.sh` - Interactive Firebase setup
+- `./scripts/deploy.sh` - Deploy to staging or production
+- `./scripts/configure-firebase-secrets.sh` - Configure Firebase secrets
+- `./scripts/verify-deployment.sh` - Verify deployment health
+- `./scripts/generate-secrets.sh` - Generate secure secrets
+
+## 📁 Project Structure
 
 ```
 velocityos/
-├── public/                 # Static HTML files
+├── velocity-os-rebuilt/   # Frontend (Next.js 14)
+│   ├── src/               # React components and pages
+│   ├── public/            # Static assets
+│   └── out/               # Built static export (for Firebase Hosting)
+├── functions/             # Backend (Firebase Cloud Functions)
+│   ├── src/               # TypeScript source
+│   └── lib/               # Compiled JavaScript
+├── public/                # Static HTML files
 │   ├── auth/              # Authentication pages
 │   └── dashboard/         # Dashboard pages
 ├── e2e/                   # End-to-end tests
 │   ├── fixtures/          # Test helpers and utilities
 │   ├── tests/             # Test specifications
 │   └── README.md          # E2E testing documentation
-├── server.js              # Express server
-├── package.json           # Dependencies and scripts
-└── README.md             # This file
+├── scripts/               # Deployment and setup scripts
+├── .github/workflows/     # CI/CD pipelines
+├── firebase.json          # Firebase configuration
+├── .firebaserc            # Firebase project aliases
+├── server.js              # Express server (local dev)
+└── README.md              # This file
 ```
 
-## CI/CD
+## 🚀 Deployment
 
-The project uses GitHub Actions for continuous integration:
+### Firebase Deployment
 
-- **Build & Test**: Runs on PRs and pushes to main/develop
-- **E2E Tests**: Automated end-to-end testing
-- **Deployment**: Automated deployment to production
+VelocityOS uses Firebase for hosting and cloud functions:
+
+1. **Quick Deploy**: Run `./scripts/firebase-setup-wizard.sh` for guided setup
+2. **Manual Deploy**: See [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md)
+
+### CI/CD with GitHub Actions
+
+- **Staging**: Auto-deploys on push to `main` branch
+- **Production**: Manual deployment via workflow dispatch
+
+### Deployment Verification
+
+After deploying, verify everything works:
+
+```bash
+./scripts/verify-deployment.sh
+```
+
+## 📚 Documentation
+
+- [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md) - Complete Firebase setup guide
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment overview
+- [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) - Pre-launch checklist
+- [FIREBASE_SETUP.md](FIREBASE_SETUP.md) - Firebase configuration details
+- [e2e/README.md](e2e/README.md) - E2E testing documentation
 
 ## License
 
