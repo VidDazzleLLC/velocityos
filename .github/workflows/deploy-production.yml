@@ -35,7 +35,7 @@ jobs:
     name: Deploy Hosting to Production
     runs-on: ubuntu-latest
     needs: confirm-deployment
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -84,7 +84,7 @@ jobs:
     name: Deploy Functions to Production
     runs-on: ubuntu-latest
     needs: confirm-deployment
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -136,18 +136,18 @@ jobs:
     runs-on: ubuntu-latest
     needs: [deploy-hosting, deploy-functions]
     if: always()
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Get project ID
         id: project-id
         run: |
           # Use Python for robust JSON parsing
           PROD_PROJECT=$(python3 -c "import json; f=open('.firebaserc'); data=json.load(f); print(data['projects']['prod'])")
           echo "project_id=$PROD_PROJECT" >> $GITHUB_OUTPUT
-      
+
       - name: Display deployment summary
         run: |
           echo "════════════════════════════════════════"
@@ -157,7 +157,7 @@ jobs:
           echo "Hosting: ${{ needs.deploy-hosting.result }}"
           echo "Functions: ${{ needs.deploy-functions.result }}"
           echo ""
-          
+
           if [ "${{ needs.deploy-hosting.result }}" == "success" ] && \
              [ "${{ needs.deploy-functions.result }}" == "success" ]; then
             echo "✅ Production deployment successful!"
