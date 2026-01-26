@@ -113,7 +113,11 @@ It should look like:
 }
 ```
 
-**If the project IDs are placeholders**, update them with your actual Firebase project IDs.
+**Important**: Verify these project IDs match your actual Firebase projects:
+- The `"default"` alias should point to your staging project
+- The `"prod"` alias should point to your production project
+- Replace `velocityos-staging` and `velocityos-production` with your actual Firebase project IDs if different
+- You can find your project IDs in the Firebase Console or by running `firebase projects:list`
 
 ---
 
@@ -324,9 +328,13 @@ firebase functions:list --project prod
 Test the API endpoint:
 ```bash
 # Test health endpoint
+# Note: Replace 'us-central1' with your region and 'velocityos-production' with your actual project ID
+# You can find the full URL in Firebase Console → Functions after deployment
 curl https://us-central1-velocityos-production.cloudfunctions.net/api/health
 
 # Expected: {"status":"ok"}
+
+# Or check Firebase Console → Functions → api → Trigger URL for your actual endpoint
 ```
 
 ### 5.3 Check Firebase Console

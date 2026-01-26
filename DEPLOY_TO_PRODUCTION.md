@@ -156,7 +156,8 @@ firebase deploy --project prod
 # Test production URL
 curl https://velocityos-production.web.app
 
-# Test API endpoint
+# Test API endpoint (replace region and project ID with yours)
+# Find actual URL in: Firebase Console → Functions → api → Trigger URL
 curl https://us-central1-velocityos-production.cloudfunctions.net/api/health
 
 # Check logs

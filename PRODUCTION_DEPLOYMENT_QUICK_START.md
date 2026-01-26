@@ -21,9 +21,10 @@ npm install -g firebase-tools
 # 4. Login to Firebase
 firebase login
 
-# 5. Verify your project exists
+# 5. Verify your production project exists
 firebase projects:list
-# Look for: velocityos-production
+# Look for your production project ID (e.g., velocityos-production, velocityos-prod, etc.)
+# Note: The exact name may vary - use whatever project ID you created in Firebase Console
 ```
 
 ✅ **If all checks pass, continue to deployment!**
@@ -39,6 +40,7 @@ firebase projects:list
 ./scripts/generate-secrets.sh
 
 # Copy the output, then set them in Firebase:
+# Note: 'prod' is an alias from .firebaserc that points to your production project
 firebase functions:secrets:set JWT_SECRET --project prod
 # Paste JWT_SECRET when prompted
 
