@@ -417,7 +417,7 @@ If a security incident occurs:
 
 - **Security Issues**: Create a private security advisory in GitHub
 - **General Support**: connect@viddazzle.com
-- **Documentation**: See `SECURITY.md` (if exists)
+- **Documentation**: See `SECURITY.md` for security policy
 - **Emergency**: Follow incident response plan above
 
 ---
