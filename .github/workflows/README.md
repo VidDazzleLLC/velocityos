@@ -6,11 +6,25 @@ This repository includes a comprehensive CI/CD workflow that builds, tests, and 
 
 ## Workflow Structure
 
+### Workflows
+
+This repository includes multiple workflows:
+
+1. **CI Workflow** (`ci.yml`) - Runs on pull requests and pushes
+2. **Deploy Hosting** (`deploy-hosting.yml`) - Deploys frontend to Firebase Hosting (staging)
+3. **Deploy Functions** (`deploy-functions.yml`) - Deploys Cloud Functions (staging)
+4. **Deploy to Production** (`deploy-production.yml`) - Manual production deployment
+
 ### Trigger Events
 
+#### CI Workflow
 The CI workflow runs on:
 - Pull requests to `main` and `develop` branches
 - Pushes to `main` and `develop` branches
+
+#### Deployment Workflows
+- **deploy-hosting.yml** and **deploy-functions.yml**: Automatically run on pushes to `main` branch
+- **deploy-production.yml**: Manually triggered via workflow dispatch
 
 ### Components Tested
 
@@ -95,23 +109,112 @@ The build command compiles TypeScript to JavaScript in the `lib/` directory.
 
 ## Enabling Firebase Deployment
 
-To enable automatic deployment to Firebase staging on main branch pushes:
+Firebase deployment workflows (`deploy-hosting.yml`, `deploy-functions.yml`, `deploy-production.yml`) require authentication credentials to deploy to Firebase.
 
-1. **Set up GitHub Secrets**:
-   - `FIREBASE_SERVICE_ACCOUNT`: Base64-encoded Firebase service account JSON
-   - `FIREBASE_PROJECT_ID`: Your Firebase project ID (e.g., `velocityos-staging`)
+### Authentication Options
 
-2. **Generate Service Account**:
+You have **two options** for authenticating with Firebase:
+
+#### Option 1: Service Account (Recommended) ⭐
+
+**Why use this?**
+- Modern, officially recommended approach
+- Works with all current and future Firebase CLI versions
+- More secure with granular permissions
+- Easier to manage and rotate
+
+**Setup Steps:**
+
+1. **Create a Service Account** in Google Cloud Console:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Select your Firebase project
+   - Navigate to **IAM & Admin** → **Service Accounts**
+   - Click **Create Service Account**
+   - Set a name (e.g., "GitHub Actions Deploy")
+   - Grant these roles:
+     - **Firebase Admin** (or more specific roles like Firebase Hosting Admin, Cloud Functions Developer)
+   - Click **Done**
+
+2. **Generate JSON Key**:
+   - Find your service account in the list
+   - Click the three dots (⋮) → **Manage keys**
+   - Click **Add Key** → **Create new key**
+   - Choose **JSON** format
+   - Click **Create** (the key file downloads automatically)
+
+3. **Add to GitHub Secrets**:
+   - Go to your repository: `Settings` → `Secrets and variables` → `Actions`
+   - Click **New repository secret**
+   - Name: `FIREBASE_SERVICE_ACCOUNT_KEY`
+   - Value: Copy and paste the **entire contents** of the downloaded JSON file
+   - Click **Add secret**
+
+#### Option 2: Firebase Token (Legacy)
+
+**Note:** This method is deprecated in Firebase CLI v11+ but still supported for backward compatibility.
+
+**Setup Steps:**
+
+1. **Generate Token** on your local machine:
    ```bash
-   # In Firebase Console, go to Project Settings > Service Accounts
-   # Generate new private key and download JSON file
-   # Then encode it:
-   base64 -i service-account.json | pbcopy  # macOS
-   base64 -i service-account.json | xclip   # Linux
+   firebase login:ci
    ```
 
-3. **Update Workflow**:
-   Uncomment the deployment steps in `.github/workflows/ci.yml` under the `firebase-prepare` job.
+2. **Copy the token** from the terminal output
+
+3. **Add to GitHub Secrets**:
+   - Go to your repository: `Settings` → `Secrets and variables` → `Actions`
+   - Click **New repository secret**
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+   - Click **Add secret**
+
+### How It Works
+
+The deployment workflows automatically detect which authentication method is available:
+
+1. **First**, they check for `FIREBASE_SERVICE_ACCOUNT_KEY` (recommended)
+2. **If not found**, they check for `FIREBASE_TOKEN` (legacy)
+3. **If neither found**, the workflow fails with a clear error message
+
+You only need to set up **one** of these methods. If both are present, the service account will be used.
+
+### Testing Deployment
+
+After setting up authentication:
+
+1. **For staging deployment**: Push to the `main` branch
+   - `deploy-hosting.yml` and `deploy-functions.yml` will run automatically
+
+2. **For production deployment**:
+   - Go to `Actions` → `Deploy to Production`
+   - Click `Run workflow`
+   - Type `DEPLOY` in the confirmation field
+   - Click `Run workflow`
+
+### Troubleshooting Deployment
+
+If deployment fails with authentication errors:
+
+1. **Verify secrets are set correctly**:
+   - Go to `Settings` → `Secrets and variables` → `Actions`
+   - Ensure either `FIREBASE_SERVICE_ACCOUNT_KEY` or `FIREBASE_TOKEN` exists
+
+2. **For Service Account**:
+   - Verify the JSON is valid and complete
+   - Ensure the service account has proper permissions
+   - Check that the Firebase project ID matches
+
+3. **For Firebase Token**:
+   - Tokens can expire - regenerate with `firebase login:ci`
+   - Ensure the token has access to the correct Firebase projects
+
+4. **Check workflow logs**:
+   - Go to `Actions` tab
+   - Click on the failed workflow run
+   - Check the "Setup Firebase Authentication" step for error details
+
+For more details, see [GITHUB_SETUP.md](../../GITHUB_SETUP.md) in the repository root.
 
 ## Configuration Files
 
