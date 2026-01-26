@@ -43,7 +43,11 @@ fi
 if [ ! -d "node_modules" ]; then
     print_warning "Dependencies not installed"
     print_info "Installing dependencies..."
-    npm install
+    if ! npm install; then
+        print_error "Failed to install dependencies"
+        echo "Please check your npm configuration and try again"
+        exit 1
+    fi
     print_success "Dependencies installed"
 fi
 
@@ -55,6 +59,10 @@ if [ ! -f .env ]; then
         cp .env.example .env
         print_success ".env file created"
         print_warning "Please update .env with your actual configuration"
+    else
+        print_error ".env.example not found"
+        echo "Cannot create .env file. Please create it manually or restore .env.example"
+        exit 1
     fi
 fi
 
