@@ -1,5 +1,33 @@
 # CI/CD Workflow Documentation
 
+## ⚙️ Authentication Setup
+
+**This repository uses Workload Identity Federation (WIF) for secure, keyless authentication to Google Cloud and Firebase.**
+
+### What is Workload Identity Federation?
+
+Workload Identity Federation allows GitHub Actions to authenticate directly with Google Cloud without storing any secrets or tokens. The authentication happens automatically using OpenID Connect (OIDC).
+
+### Setup Status
+
+✅ **Already configured!** The following components are in place:
+
+1. **Workload Identity Pool**: `github-actions` (configured in Google Cloud)
+2. **Workload Identity Provider**: `github` (linked to this repository)
+3. **Service Account**: `firebase-adminsdk-f6svc@velocityos-staging.iam.gserviceaccount.com`
+4. **Permissions**: Service account has Firebase Admin and Hosting deployment access
+
+### No Secrets Required! 🎉
+
+Unlike traditional approaches, you do **NOT** need to:
+- Generate Firebase tokens
+- Store `FIREBASE_TOKEN` in GitHub Secrets
+- Manage or rotate credentials manually
+
+Authentication happens automatically through WIF in the workflow.
+
+---
+
 ## Overview
 
 This repository includes a comprehensive CI/CD workflow that builds, tests, and validates all components of the VelocityOS application.
@@ -9,7 +37,7 @@ This repository includes a comprehensive CI/CD workflow that builds, tests, and 
 ### Trigger Events
 
 The CI workflow runs on:
-- Pull requests to `main` and `develop` branches
+- Pull requests to `main` and `develop` branches  
 - Pushes to `main` and `develop` branches
 
 ### Components Tested
@@ -18,179 +46,81 @@ The CI workflow runs on:
 2. **Frontend** (`velocity-os-rebuilt`) - Next.js 14 app with TypeScript and Tailwind CSS
 3. **Backend** (`functions`) - Firebase Cloud Functions with Express API
 
-### Workflow Jobs
+---
 
-#### 1. Root Build & Test
-- Installs dependencies with `npm ci`
-- Runs linting with `npm run lint`
-- Runs tests with `npm test`
-- Uses Node.js 20.x with dependency caching
+## Deployment Workflows
 
-#### 2. Frontend Build & Test
-- Installs dependencies with `npm ci`
-- Runs ESLint for code quality
-- Runs tests (placeholder currently)
-- Builds Next.js app with static export
-- Uploads build artifacts for verification
-- Uses Node.js 20.x with dependency caching
+### Deploy Hosting
 
-#### 3. Backend Build & Test
-- Installs dependencies with `npm ci`
-- Runs ESLint with Google style guide
-- Runs tests (placeholder currently)
-- Compiles TypeScript to JavaScript
-- Uploads compiled functions
-- Uses Node.js 20.x with dependency caching
+Automatically deploys the frontend to Firebase Hosting when changes are pushed to `main`.
 
-#### 4. Firebase Deployment Preparation
-- **Only runs on pushes to `main` branch**
-- Waits for all build jobs to complete
-- Downloads build artifacts
-- Validates Firebase configuration
-- Provides instructions for enabling deployment
-- **Does NOT auto-deploy** (requires manual setup)
+**Authentication**: Uses Workload Identity Federation (no tokens needed)
 
-#### 5. CI Status Summary
-- Checks status of all jobs
-- Fails if any required job fails
-- Provides clear status summary
+### Deploy Functions  
 
-## Local Development
+Automatically deploys Firebase Cloud Functions when changes are pushed to `main`.
 
-### Prerequisites
+**Authentication**: Uses Workload Identity Federation (no tokens needed)
 
-- Node.js 20.x or higher
-- npm 10.x or higher
+### Deploy to Production
 
-### Running Locally
+Manual workflow for deploying to production environment.
 
-#### Root Directory
-```bash
-npm install
-npm run lint
-npm test
-```
+**Authentication**: Uses Workload Identity Federation (no tokens needed)
 
-#### Frontend (velocity-os-rebuilt)
-```bash
-cd velocity-os-rebuilt
-npm install
-npm run lint
-npm test
-npm run build
-```
+---
 
-The build command automatically creates a static export in the `out/` directory.
+## How It Works
 
-#### Backend (functions)
-```bash
-cd functions
-npm install
-npm run lint
-npm test
-npm run build
-```
+### Authentication Flow
 
-The build command compiles TypeScript to JavaScript in the `lib/` directory.
+1. GitHub Actions workflow starts
+2. Workflow requests an OIDC token from GitHub
+3. Google Cloud validates the token against the Workload Identity Pool
+4. If valid, grants temporary credentials to the service account
+5. Workflow uses credentials to deploy to Firebase
 
-## Enabling Firebase Deployment
+### Example Workflow Step
 
-To enable automatic deployment to Firebase staging on main branch pushes:
-
-1. **Set up GitHub Secrets**:
-   - `FIREBASE_SERVICE_ACCOUNT`: Base64-encoded Firebase service account JSON
-   - `FIREBASE_PROJECT_ID`: Your Firebase project ID (e.g., `velocityos-staging`)
-
-2. **Generate Service Account**:
-   ```bash
-   # In Firebase Console, go to Project Settings > Service Accounts
-   # Generate new private key and download JSON file
-   # Then encode it:
-   base64 -i service-account.json | pbcopy  # macOS
-   base64 -i service-account.json | xclip   # Linux
-   ```
-
-3. **Update Workflow**:
-   Uncomment the deployment steps in `.github/workflows/ci.yml` under the `firebase-prepare` job.
-
-## Configuration Files
-
-### Root
-- `package.json` - Dependencies and scripts
-- `package-lock.json` - Locked dependency versions
-
-### Frontend (velocity-os-rebuilt)
-- `package.json` - Next.js and dependencies
-- `package-lock.json` - Locked dependency versions
-- `next.config.js` - Next.js configuration (static export enabled)
-- `tsconfig.json` - TypeScript configuration
-- `tailwind.config.js` - Tailwind CSS configuration
-- `.eslintrc.json` - ESLint configuration (Next.js strict)
-
-### Backend (functions)
-- `package.json` - Firebase Functions dependencies
-- `package-lock.json` - Locked dependency versions
-- `tsconfig.json` - TypeScript configuration (strict mode)
-- `.eslintrc.js` - ESLint configuration (Google style guide)
-- `src/index.ts` - Main Cloud Function entry point
-
-## Caching Strategy
-
-The workflow uses GitHub Actions caching to speed up builds:
-- Node modules are cached per directory
-- Cache key is based on `package-lock.json` hash
-- Separate caches for root, frontend, and backend
-
-## Node.js Version Management
-
-The Node.js version is centralized as an environment variable:
 ```yaml
-env:
-  NODE_VERSION: '20'
+- name: Authenticate to Google Cloud
+  uses: google-github-actions/auth@v2
+  with:
+    workload_identity_provider: 'projects/1033383212128/locations/global/workloadIdentityPools/github-actions/providers/github'
+    service_account: 'firebase-adminsdk-f6svc@velocityos-staging.iam.gserviceaccount.com'
 ```
 
-To update the Node.js version, change this single value and all jobs will use the new version.
+That's it! No secrets, no tokens to manage.
 
-## Parallel Execution
-
-Jobs run in parallel where possible:
-- Root, frontend, and backend builds run simultaneously
-- Firebase preparation waits for all builds to complete
-- This minimizes total CI time
+---
 
 ## Troubleshooting
 
-### Build Failures
+### Authentication Errors
 
-1. **Check job logs** in GitHub Actions for specific error messages
-2. **Run locally** to reproduce the issue
-3. **Verify dependencies** are correctly installed
-4. **Check Node.js version** matches the workflow
+If you see `Unable to acquire impersonated credentials`, check:
 
-### Cache Issues
+1. **Service account email** is correct in workflow
+2. **Workload Identity Pool** principal has Workload Identity User role
+3. **Repository name** matches the one configured in WIF
 
-If you suspect cache corruption:
-1. Update a dependency to change `package-lock.json`
-2. This will invalidate the cache and force a fresh install
+### Deployment Failures
 
-### TypeScript Errors
+If deployment fails after authentication:
 
-- Ensure `tsconfig.json` is properly configured
-- Run `npm run build` locally to check compilation
-- Check that all type definitions are installed
+1. Verify the service account has necessary Firebase roles
+2. Check Firebase project permissions
+3. Review workflow logs for specific error messages
 
-## Security
+---
 
-- Workflow uses minimal permissions (`contents: read`)
-- No automatic deployment to production
-- Firebase credentials stored as encrypted secrets
-- CodeQL security scanning enabled
+## Additional Resources
 
-## Future Enhancements
+- [Workload Identity Federation Documentation](https://cloud.google.com/iam/docs/workload-identity-federation)
+- [GitHub Actions OIDC](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect)
+- [Firebase Hosting Documentation](https://firebase.google.com/docs/hosting)
 
-- [ ] Add actual test suites for frontend and backend
-- [ ] Add code coverage reporting
-- [ ] Add performance benchmarking
-- [ ] Add automated dependency updates (Dependabot)
-- [ ] Add preview deployments for pull requests
-- [ ] Add end-to-end testing with Playwright or Cypress
+
+---
+
+_Last updated: Testing WIF deployment with Service Account Token Creator role_

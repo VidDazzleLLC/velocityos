@@ -2,11 +2,59 @@
 
 This directory contains helpful scripts for setting up, deploying, and managing VelocityOS.
 
+## Quick Reference
+
+| Script | Purpose | When to Use |
+|--------|---------|-------------|
+| `firebase-setup-wizard.sh` | **Interactive Firebase setup** | First-time Firebase configuration |
+| `setup.sh` | Initial project setup | First time cloning repository |
+| `deploy.sh` | Deploy to Firebase | Manual deployments |
+| `configure-firebase-secrets.sh` | Configure Firebase secrets | Setting up secrets for Cloud Functions |
+| `verify-deployment.sh` | Verify deployment health | After deploying to check status |
+| `generate-secrets.sh` | Generate JWT/Session secrets | Creating secure authentication secrets |
+
 ## Available Scripts
+
+### 🧙 firebase-setup-wizard.sh ⭐ **RECOMMENDED FOR FIRST-TIME SETUP**
+
+**Purpose**: Interactive wizard that guides you through complete Firebase setup
+
+**Usage**:
+```bash
+./scripts/firebase-setup-wizard.sh
+```
+
+**What it does**:
+- ✅ Checks and installs prerequisites (Node.js, npm, Firebase CLI)
+- ✅ Authenticates with Firebase
+- ✅ Helps configure Firebase projects (staging and production)
+- ✅ Updates `.firebaserc` with your project IDs
+- ✅ Generates secure secrets (JWT_SECRET, SESSION_SECRET)
+- ✅ Configures Firebase Cloud Functions secrets
+- ✅ Builds frontend and backend
+- ✅ Generates Firebase CI token for GitHub Actions
+- ✅ Provides step-by-step instructions for GitHub setup
+
+**When to use**:
+- **First time setting up Firebase for VelocityOS**
+- When you need guided setup with explanations
+- When configuring both staging and production environments
+
+**Interactive prompts**:
+- Installation of Firebase CLI (if needed)
+- Firebase login
+- Project ID configuration
+- Secret generation and configuration
+- AI API key setup (optional)
+- GitHub Actions token generation
+
+**Time**: 10-15 minutes
+
+---
 
 ### 🚀 setup.sh
 
-**Purpose**: First-time setup and installation
+**Purpose**: First-time project setup and installation
 
 **Usage**:
 ```bash
@@ -72,6 +120,37 @@ SESSION_SECRET=def456...uvw012
 
 ---
 
+### 🔧 configure-firebase-secrets.sh
+
+**Purpose**: Configure secrets for Firebase Cloud Functions
+
+**Usage**:
+```bash
+./scripts/configure-firebase-secrets.sh
+```
+
+**What it does**:
+- Guides you through configuring Firebase Function secrets
+- Allows choosing staging, production, or both environments
+- Can generate new secrets or use existing ones
+- Configures required secrets (JWT_SECRET, SESSION_SECRET)
+- Optionally configures AI API keys (Gemini, OpenAI, Anthropic)
+- Optionally configures OAuth credentials (Google)
+
+**When to use**:
+- After creating Firebase projects
+- When adding new secrets to Cloud Functions
+- When configuring different secrets for staging vs production
+- When rotating secrets
+
+**Interactive options**:
+1. Select environment (staging/production/both)
+2. Generate new or enter existing secrets
+3. Configure optional AI API keys
+4. Configure optional OAuth credentials
+
+---
+
 ### 🚀 deploy.sh
 
 **Purpose**: Interactive Firebase deployment with safety checks
@@ -112,6 +191,50 @@ SESSION_SECRET=def456...uvw012
 
 ---
 
+### ✅ verify-deployment.sh
+
+**Purpose**: Verify that your Firebase deployment is working correctly
+
+**Usage**:
+```bash
+./scripts/verify-deployment.sh
+```
+
+**What it does**:
+- Prompts for environment (staging/production)
+- Retrieves project ID from `.firebaserc`
+- Runs comprehensive health checks:
+  - ✅ Hosting accessibility
+  - ✅ Cloud Functions deployment status
+  - ✅ API health endpoint
+  - ✅ Firestore database accessibility
+  - ✅ Firebase Authentication configuration
+  - ✅ Build artifacts presence
+  - ✅ Configuration files validation
+- Provides deployment summary with URLs
+- Suggests next steps if checks fail
+
+**When to use**:
+- After deploying to verify everything works
+- Troubleshooting deployment issues
+- Regular health checks
+
+**Example output**:
+```
+✅ Checks passed: 7
+❌ Checks failed: 0
+
+All checks passed! 🎉
+
+🌐 Access your app at:
+   https://velocityos-staging-xxx.web.app
+
+📊 Firebase Console:
+   https://console.firebase.google.com/project/velocityos-staging-xxx
+```
+
+---
+
 ## Script Permissions
 
 All scripts should be executable. If not, run:
@@ -122,7 +245,19 @@ chmod +x scripts/*.sh
 
 ## Common Workflows
 
-### First-Time Setup
+### First-Time Complete Setup (RECOMMENDED)
+
+```bash
+# Run the all-in-one wizard
+./scripts/firebase-setup-wizard.sh
+
+# Follow the interactive prompts
+# When complete, deploy:
+./scripts/deploy.sh
+```
+
+### Alternative: Manual Setup
+
 ```bash
 # 1. Run setup script
 ./scripts/setup.sh
@@ -133,11 +268,18 @@ chmod +x scripts/*.sh
 # 3. Edit .env with generated secrets and your API keys
 nano .env
 
-# 4. Test locally
+# 4. Configure Firebase secrets
+./scripts/configure-firebase-secrets.sh
+
+# 5. Test locally
 npm start
+
+# 6. Deploy to staging
+./scripts/deploy.sh
 ```
 
 ### Deploying to Staging
+
 ```bash
 # Option 1: Using deploy script (recommended)
 ./scripts/deploy.sh
@@ -149,6 +291,7 @@ firebase deploy --project default
 ```
 
 ### Deploying to Production
+
 ```bash
 # Using deploy script (recommended for safety)
 ./scripts/deploy.sh
@@ -157,7 +300,15 @@ firebase deploy --project default
 # Select: 1 (everything)
 ```
 
+### Verify Deployment
+
+```bash
+./scripts/verify-deployment.sh
+# Select environment to verify
+```
+
 ### Rotating Secrets
+
 ```bash
 # 1. Generate new secrets
 ./scripts/generate-secrets.sh
@@ -165,12 +316,23 @@ firebase deploy --project default
 # 2. Update .env file with new secrets
 
 # 3. Update Firebase Functions secrets
-firebase functions:secrets:set JWT_SECRET --project default
-firebase functions:secrets:set SESSION_SECRET --project default
+./scripts/configure-firebase-secrets.sh
 
 # 4. Redeploy functions
 ./scripts/deploy.sh
 # Select functions only
+```
+
+### Configuring AI API Keys
+
+```bash
+# Use the secrets configuration script
+./scripts/configure-firebase-secrets.sh
+
+# Follow prompts to add:
+# - GEMINI_API_KEY
+# - OPENAI_API_KEY
+# - ANTHROPIC_API_KEY
 ```
 
 ## Troubleshooting

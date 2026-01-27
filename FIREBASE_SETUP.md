@@ -12,6 +12,40 @@ VelocityOS has been configured with:
 
 ## What Still Needs to Be Done
 
+### ⚠️ CRITICAL: Configure FIREBASE_TOKEN Secret (Required for Deployment)
+
+**This is the most common issue preventing deployments from working!**
+
+The Firebase deployment workflows require a `FIREBASE_TOKEN` secret to authenticate with Firebase. Without this, deployments will fail with:
+```
+Error: Failed to authenticate, have you run firebase login?
+```
+
+#### How to Set Up FIREBASE_TOKEN:
+
+1. **Generate a Firebase CI token** by running this command on your local machine:
+   ```bash
+   firebase login:ci
+   ```
+   This will:
+   - Open a browser for you to authenticate with your Google account
+   - Generate a CI token and display it in the terminal
+   - Copy this token (it looks like: `1//0abcdefghijklmnopqrstuvwxyz...`)
+
+2. **Add the token to GitHub Secrets**:
+   - Go to your GitHub repository
+   - Click on **Settings** → **Secrets and variables** → **Actions**
+   - Click **New repository secret**
+   - Name: `FIREBASE_TOKEN`
+   - Value: Paste the token from step 1
+   - Click **Add secret**
+
+3. **Verify the secret is set**:
+   - The next time you push to `main`, the deployment workflow will validate the token
+   - If the token is missing, you'll see a clear error message with setup instructions
+
+⚠️ **Note**: The token allows GitHub Actions to deploy to Firebase on your behalf. Keep it secure and never commit it to your repository.
+
 ### 1. Update Firebase Project IDs
 
 Edit `.firebaserc` and replace placeholder project IDs with your actual Firebase project IDs:
@@ -40,19 +74,23 @@ If you haven't created Firebase projects yet:
    - **velocityos-production** (for production)
 3. Enable Firebase Hosting and Cloud Functions for both projects
 
-### 3. Configure GitHub Secrets
+### 3. Configure Additional GitHub Secrets (Optional)
 
-Add the following secrets to your GitHub repository:
+The `FIREBASE_TOKEN` (configured above) is the only required secret for basic deployments.
 
-#### Required for Staging Environment:
+If you need environment-specific configurations, you can optionally set up GitHub Environments:
+
+#### For Staging Environment (Optional):
 Go to: Settings → Environments → staging → Add environment secret
 
-- `FIREBASE_TOKEN` - Get this by running `firebase login:ci` locally
+- Additional secrets as needed for your staging environment
 
-#### Required for Production Environment:
+#### For Production Environment (Optional):
 Create a production environment first, then add:
 
-- `FIREBASE_TOKEN` - Same token or separate one for production
+- Additional secrets as needed for your production environment
+
+**Note**: For most use cases, the repository-level `FIREBASE_TOKEN` secret is sufficient for both staging and production deployments.
 
 ### 4. Configure Environment Variables for Cloud Functions
 
@@ -192,9 +230,20 @@ Workflows are located in `.github/workflows/`:
 
 ## Troubleshooting
 
+### ❌ "Failed to authenticate, have you run firebase login?" Error
+
+**Cause**: The `FIREBASE_TOKEN` secret is not set in GitHub repository settings.
+
+**Solution**:
+1. Run `firebase login:ci` on your local machine to generate a token
+2. Go to GitHub repository Settings → Secrets and variables → Actions
+3. Add a new repository secret named `FIREBASE_TOKEN` with the generated token
+4. See the "CRITICAL: Configure FIREBASE_TOKEN Secret" section above for detailed steps
+
 ### Workflow Fails with "FIREBASE_TOKEN not found"
-- Add the secret to GitHub Environments (not Repository secrets)
+- The secret must be added as a **repository secret**, not an environment secret
 - Get token: `firebase login:ci`
+- Add to: Settings → Secrets and variables → Actions → New repository secret
 
 ### "Functions not found" Error
 - Ensure `functions` folder exists with `index.js`

@@ -1,11 +1,13 @@
 name: Deploy Hosting
+# Updated with service account private key
+
 on:
   push:
     branches: [main]
 
-# Set minimal permissions for security
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   deploy-hosting:
@@ -21,20 +23,18 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'velocity-os-rebuilt/package-lock.json'
 
-      - name: Install & build hosting (velocity-os-rebuilt)
+      - name: Install & build Hosting (velocity-os-rebuilt)
         working-directory: velocity-os-rebuilt
         run: |
           npm ci
           npm run build
 
-      - name: Install Firebase Tools
-        run: npm install -g firebase-tools
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools@latest
 
       - name: Deploy to Firebase Hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: |
-          echo "Deploying to Firebase Hosting (staging)..."
-          firebase use default
-          firebase deploy --only hosting --token "$FIREBASE_TOKEN" --non-interactive
-          echo "✅ Deployment complete!"
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_TOKEN }}
+          projectId: velocityos-staging
