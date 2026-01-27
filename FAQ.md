@@ -67,7 +67,7 @@ After authentication, the terminal will display a message like:
 Your GitHub Actions workflows will now be able to deploy to Firebase. Push a change to the `main` branch to test.
 
 **Related Documentation:**
-- [FIREBASE_SETUP.md](FIREBASE_SETUP.md#critical-configure-firebase_token-secret-required-for-deployment) - Detailed Firebase setup
+- [FIREBASE_SETUP.md](FIREBASE_SETUP.md#️-critical-configure-firebase_token-secret-required-for-deployment) - Detailed Firebase setup
 - [GITHUB_SETUP.md](GITHUB_SETUP.md#step-1-generate-firebase-ci-token) - GitHub configuration guide
 
 ---
