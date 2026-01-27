@@ -12,16 +12,45 @@ VelocityOS has been configured with:
 
 ## What Still Needs to Be Done
 
-### ⚠️ CRITICAL: Configure FIREBASE_TOKEN Secret (Required for Deployment)
+### ⚠️ CRITICAL: Configure Firebase Authentication (Required for Deployment)
 
 **This is the most common issue preventing deployments from working!**
 
-The Firebase deployment workflows require a `FIREBASE_TOKEN` secret to authenticate with Firebase. Without this, deployments will fail with:
+The Firebase deployment workflows require authentication credentials to deploy to Firebase. Without this, deployments will fail with:
 ```
 Error: Failed to authenticate, have you run firebase login?
 ```
 
-#### How to Set Up FIREBASE_TOKEN:
+You have **two options** for authentication. **Option 1 (Service Account) is recommended** for better security and reliability.
+
+#### Option 1: Service Account Authentication (Recommended) ✅
+
+This is the modern, recommended approach that doesn't use deprecated authentication methods.
+
+1. **Generate a service account key**:
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Select your project
+   - Go to **Project Settings** → **Service Accounts**
+   - Click **Generate new private key**
+   - A JSON file will be downloaded
+
+2. **Add the service account to GitHub Secrets**:
+   - Go to your GitHub repository
+   - Click on **Settings** → **Secrets and variables** → **Actions**
+   - Click **New repository secret**
+   - Name: `FIREBASE_SERVICE_ACCOUNT`
+   - Value: Paste the **entire contents** of the JSON file from step 1
+   - Click **Add secret**
+
+3. **Verify the secret is set**:
+   - The next time you push to `main`, the deployment workflow will use service account authentication
+   - You should see: `✅ Using service account authentication (recommended)`
+
+⚠️ **Note**: The service account key allows GitHub Actions to deploy to Firebase on your behalf. Keep it secure and never commit it to your repository.
+
+#### Option 2: CI Token Authentication (Legacy) ⚠️
+
+This method still works but is deprecated by Firebase and will be removed in future versions.
 
 1. **Generate a Firebase CI token** by running this command on your local machine:
    ```bash
@@ -42,9 +71,9 @@ Error: Failed to authenticate, have you run firebase login?
 
 3. **Verify the secret is set**:
    - The next time you push to `main`, the deployment workflow will validate the token
-   - If the token is missing, you'll see a clear error message with setup instructions
+   - You should see: `⚠️ Using legacy token authentication (deprecated)`
 
-⚠️ **Note**: The token allows GitHub Actions to deploy to Firebase on your behalf. Keep it secure and never commit it to your repository.
+⚠️ **Important**: Consider migrating to Option 1 (Service Account) as token-based authentication is deprecated.
 
 ### 1. Update Firebase Project IDs
 
