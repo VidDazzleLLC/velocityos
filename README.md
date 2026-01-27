@@ -27,6 +27,11 @@ The fastest way to get VelocityOS up and running:
 
 **For detailed deployment instructions**, see [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md)
 
+> **❓ Common Questions:**
+> - **Need to generate a Firebase token for GitHub Actions?** See [FAQ: How do I generate a Firebase CI token?](FAQ.md#how-do-i-generate-a-firebase-ci-token-for-github-actions-deployment)
+> - **Deployment failing with authentication error?** See [FAQ: Troubleshooting](FAQ.md#why-does-my-deployment-fail-with-failed-to-authenticate)
+> - **More questions?** Check the [FAQ.md](FAQ.md)
+
 ## 💻 Local Development
 
 ### Prerequisites
@@ -141,6 +146,7 @@ After deploying, verify everything works:
 
 ## 📚 Documentation
 
+- [FAQ.md](FAQ.md) - **Frequently Asked Questions** ⭐ Start here for common questions!
 - [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md) - Complete Firebase setup guide
 - [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment overview
 - [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) - Pre-launch checklist
