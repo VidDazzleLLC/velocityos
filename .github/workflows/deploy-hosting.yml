@@ -34,11 +34,16 @@ jobs:
           npm ci
           npm run build
 
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Install Firebase CLI
         run: npm install -g firebase-tools@latest
 
       - name: Deploy to Firebase Hosting
         run: |
+          # Get access token from WIF credentials
+          ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
 
           echo "Deploying Hosting to staging..."
-          firebase deploy --only hosting --project velocityos-staging
+          firebase deploy --only hosting --project velocityos-staging --token "$ACCESS_TOKEN"
