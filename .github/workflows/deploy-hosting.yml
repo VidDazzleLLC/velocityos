@@ -1,4 +1,5 @@
 name: Deploy Hosting
+# Updated with service account private key
 
 on:
   push:
