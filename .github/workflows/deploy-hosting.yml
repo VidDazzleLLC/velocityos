@@ -43,7 +43,4 @@ jobs:
 
       - name: Deploy to Firebase Hosting
         run: |
-          # Get access token from WIF credentials
-          ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
-          echo "Deploying Hosting to staging..."
-          firebase deploy --only hosting --project velocityos-staging --token "$ACCESS_TOKEN"
+                    firebase deploy --only hosting --project velocityos-staging
