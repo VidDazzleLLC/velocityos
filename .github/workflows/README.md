@@ -119,3 +119,8 @@ If deployment fails after authentication:
 - [Workload Identity Federation Documentation](https://cloud.google.com/iam/docs/workload-identity-federation)
 - [GitHub Actions OIDC](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect)
 - [Firebase Hosting Documentation](https://firebase.google.com/docs/hosting)
+
+
+---
+
+_Last updated: Testing WIF deployment with Service Account Token Creator role_
