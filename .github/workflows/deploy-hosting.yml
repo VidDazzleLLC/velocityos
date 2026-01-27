@@ -40,5 +40,4 @@ jobs:
       - name: Deploy to Firebase Hosting
         run: |
           echo "Deploying Hosting to staging..."
-          firebase use default
-          firebase deploy --only hosting --non-interactive
+        firebase deploy --only hosting --project velocityos-staging
