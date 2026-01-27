@@ -2,8 +2,8 @@ name: Deploy Hosting
 # Updated with new Firebase service account token
 
 on:
-  push:
-    branches: [main]
+   push:
+     branches: [main]
 
 # Set minimal permissions for security
 permissions:
