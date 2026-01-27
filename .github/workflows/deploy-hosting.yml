@@ -20,7 +20,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: 'projects/1033383212128/locations/global/workloadIdentityPools/gh-actions-wif/providers/gh-provider'
-          service_account: 'firebase-adminsdk-f6svc@velocityos-staging.iam.gserviceaccount.com'
+          service_account: 'firebase-adminsdk-@velocityos-staging.iam.gserviceaccount.com'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
