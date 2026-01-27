@@ -6,7 +6,7 @@ on:
 # Set minimal permissions for security
 permissions:
   contents: read
-    id-token: write
+  id-token: write
 
 jobs:
   deploy-hosting:
