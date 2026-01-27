@@ -43,4 +43,5 @@ jobs:
 
       - name: Deploy to Firebase Hosting
         run: |
-                    firebase deploy --only hosting --project velocityos-staging
+          GOOGLE_AUTH_TOKEN=$(gcloud auth application-default print-access-token)
+          firebase deploy --only hosting --project velocityos-staging --token "$GOOGLE_AUTH_TOKEN"
