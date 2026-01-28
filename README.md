@@ -35,6 +35,16 @@ The fastest way to get VelocityOS up and running:
 - npm or yarn
 - Firebase CLI (optional, for deployment)
 
+### Navigating to Repository Root
+
+When working with the repository, you may need to navigate back to the root directory:
+
+```bash
+cd /path/to/velocityos
+# or, if you're somewhere below it:
+cd "$(git rev-parse --show-toplevel)"
+```
+
 ### Installation
 
 ```bash
