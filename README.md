@@ -47,6 +47,18 @@ npm run dev
 
 The application will be available at `http://localhost:3000`
 
+### Accessing the Dashboard
+
+Once the development server is running:
+
+- **Login Page**: `http://localhost:3000/` or `http://localhost:3000/login`
+- **Dashboard**: `http://localhost:3000/dashboard` (requires login)
+
+After deploying to Firebase:
+
+- **Production URL**: `https://[your-project-id].web.app/dashboard`
+- **Staging URL**: `https://[your-staging-project-id].web.app/dashboard`
+
 ## 🧪 Testing
 
 ### End-to-End Tests
