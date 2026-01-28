@@ -8,6 +8,7 @@ const navItems = [
   { name: 'Customers', path: '/customers', icon: '👥' },
   { name: 'Communications', path: '/communications', icon: '💬' },
   { name: 'Reports', path: '/reports', icon: '📈' },
+  { name: 'Terminal', path: '/terminal', icon: '⌨️' },
   { name: 'Settings', path: '/settings', icon: '⚙️' },
 ]
 
