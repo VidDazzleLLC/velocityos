@@ -153,6 +153,9 @@ sudo make install
 
 # Configure for this repository
 cd /path/to/velocityos
+# or, if you're somewhere below it:
+cd "$(git rev-parse --show-toplevel)"
+
 git secrets --install
 git secrets --register-aws
 git secrets --add '1//[0-9A-Za-z_-]{30,}'  # Firebase CI token pattern

@@ -8,6 +8,9 @@ A one-page reference for common tasks and commands.
 # Clone and setup
 git clone https://github.com/VidDazzleLLC/velocityos.git
 cd velocityos
+# or, if you're somewhere below it:
+# cd "$(git rev-parse --show-toplevel)"
+
 ./scripts/setup.sh
 ```
 
