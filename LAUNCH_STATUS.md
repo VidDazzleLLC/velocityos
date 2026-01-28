@@ -224,7 +224,7 @@ firebase login:ci
 git clone https://github.com/VidDazzleLLC/velocityos.git
 cd velocityos
 # or, if you're somewhere below it:
-# cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)"
 
 ./scripts/setup.sh
 ```

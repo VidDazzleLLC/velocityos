@@ -175,7 +175,7 @@ This will:
 git clone https://github.com/VidDazzleLLC/velocityos.git
 cd velocityos
 # or, if you're somewhere below it:
-# cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)"
 
 # Run the secrets generator
 ./scripts/generate-secrets.sh
@@ -539,7 +539,7 @@ node --version && npm --version && firebase --version
 git clone https://github.com/VidDazzleLLC/velocityos.git
 cd velocityos
 # or, if you're somewhere below it:
-# cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)"
 
 npm install
 

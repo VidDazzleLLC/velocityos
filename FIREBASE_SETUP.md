@@ -132,7 +132,7 @@ The `functions` folder doesn't exist yet. Create it:
 ```bash
 cd velocityos
 # or, if you're somewhere below it:
-# cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)"
 
 mkdir functions
 cd functions
