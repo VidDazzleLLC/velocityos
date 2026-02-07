@@ -141,9 +141,15 @@ After deploying, verify everything works:
 
 ## 📚 Documentation
 
+### Launch Guides
+- ⭐ [NEXT_STEPS_TO_LAUNCH.md](NEXT_STEPS_TO_LAUNCH.md) - **Complete launch roadmap** (START HERE)
+- ⚡ [LAUNCH_QUICK_REFERENCE.md](LAUNCH_QUICK_REFERENCE.md) - Quick reference for launch steps
+- [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) - Pre-launch checklist
+- [LAUNCH_STATUS.md](LAUNCH_STATUS.md) - Current status report
+
+### Deployment
 - [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md) - Complete Firebase setup guide
 - [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment overview
-- [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) - Pre-launch checklist
 - [FIREBASE_SETUP.md](FIREBASE_SETUP.md) - Firebase configuration details
 - [e2e/README.md](e2e/README.md) - E2E testing documentation
 
