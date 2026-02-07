@@ -19,6 +19,9 @@ GitHub Secrets are encrypted environment variables used in GitHub Actions workfl
 
 You need to add the `FIREBASE_TOKEN` secret to enable automated deployments.
 
+**📖 For detailed instructions with troubleshooting, see:**
+**[FAQ: How do I generate a Firebase CI token for GitHub Actions deployment?](FAQ.md#how-do-i-generate-a-firebase-ci-token-for-github-actions-deployment)**
+
 #### Step 1: Generate Firebase CI Token
 
 On your local machine, run:

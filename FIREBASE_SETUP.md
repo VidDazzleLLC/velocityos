@@ -23,6 +23,11 @@ Error: Failed to authenticate, have you run firebase login?
 
 #### How to Set Up FIREBASE_TOKEN:
 
+**📖 For detailed step-by-step instructions with screenshots and troubleshooting, see:**
+**[FAQ: How do I generate a Firebase CI token for GitHub Actions deployment?](FAQ.md#how-do-i-generate-a-firebase-ci-token-for-github-actions-deployment)**
+
+**Quick summary:**
+
 1. **Generate a Firebase CI token** by running this command on your local machine:
    ```bash
    firebase login:ci
