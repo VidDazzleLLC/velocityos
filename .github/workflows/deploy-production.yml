@@ -71,7 +71,11 @@ jobs:
           echo "✅ FIREBASE_TOKEN secret is configured"
 
       - name: Deploy to Firebase Hosting (Production)
-        run: firebase use production && firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive
+        run: |
+          # Note: Using 'default' project until separate production project is created
+          # To set up separate production: create 'velocityos-production' Firebase project
+          firebase use default
+          firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
@@ -119,6 +123,10 @@ jobs:
           echo "✅ FIREBASE_TOKEN secret is configured"
 
       - name: Deploy to Firebase Functions (Production)
-        run: firebase use production && firebase deploy --only functions --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive --force
+        run: |
+          # Note: Using 'default' project until separate production project is created
+          # To set up separate production: create 'velocityos-production' Firebase project
+          firebase use default
+          firebase deploy --only functions --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive --force
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
