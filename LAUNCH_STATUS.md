@@ -223,6 +223,9 @@ firebase login:ci
 ```bash
 git clone https://github.com/VidDazzleLLC/velocityos.git
 cd velocityos
+# Alternative: if you're already in the repo, navigate to root with:
+# cd "$(git rev-parse --show-toplevel)"
+
 ./scripts/setup.sh
 ```
 

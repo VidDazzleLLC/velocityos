@@ -26,6 +26,9 @@ Before resolving conflicts, decide which PRs are still needed:
 ```bash
 # Clone or update your local repository
 cd /path/to/velocityos
+# or, if you're somewhere below it:
+cd "$(git rev-parse --show-toplevel)"
+
 git checkout main
 git pull origin main
 
