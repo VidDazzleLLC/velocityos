@@ -13,7 +13,11 @@ VelocityOS is a next-gen AI business OS that automates routine work.
 
 ## 🚀 Quick Start - Deploy to Firebase
 
-The fastest way to get VelocityOS up and running:
+**⚡ Fastest path to production: 20 minutes**
+
+See **[QUICK_LAUNCH_GUIDE.md](QUICK_LAUNCH_GUIDE.md)** for the complete quick-start guide.
+
+### TL;DR
 
 ```bash
 # 1. Run the setup wizard (installs dependencies, builds app, configures Firebase)
@@ -25,7 +29,13 @@ The fastest way to get VelocityOS up and running:
 # That's it! Your app is live! 🎉
 ```
 
-**For detailed deployment instructions**, see [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md)
+**Next Steps**:
+1. Create Firebase projects (staging + production) - 5 min
+2. Update `.firebaserc` with project IDs - 1 min  
+3. Configure `FIREBASE_TOKEN` in GitHub Secrets - 3 min
+4. Deploy and verify - 5 min
+
+**For detailed step-by-step instructions**, see [QUICK_LAUNCH_GUIDE.md](QUICK_LAUNCH_GUIDE.md)
 
 ## 💻 Local Development
 
@@ -141,11 +151,41 @@ After deploying, verify everything works:
 
 ## 📚 Documentation
 
+### 🚀 Getting Started
+- **[QUICK_LAUNCH_GUIDE.md](QUICK_LAUNCH_GUIDE.md)** - ⭐ **START HERE!** Fast track to production (20 min)
 - [FIREBASE_DEPLOYMENT_COMPLETE.md](FIREBASE_DEPLOYMENT_COMPLETE.md) - Complete Firebase setup guide
-- [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment overview
 - [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) - Pre-launch checklist
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment overview
+
+### 🔐 Security
+- **[SECURITY.md](SECURITY.md)** - Security policy and vulnerability reporting
+- [SECURITY_REMEDIATION.md](SECURITY_REMEDIATION.md) - Security best practices and incident response
+- [.pre-commit-config.yaml](.pre-commit-config.yaml) - Automated security checks
+
+### 🛠️ Configuration
 - [FIREBASE_SETUP.md](FIREBASE_SETUP.md) - Firebase configuration details
+- [MANUAL_TASKS.md](MANUAL_TASKS.md) - Manual setup steps
+- [.env.example](.env.example) - Environment variable template
+
+### 🧪 Testing
 - [e2e/README.md](e2e/README.md) - E2E testing documentation
+- [scripts/README.md](scripts/README.md) - Automation scripts guide
+
+---
+
+## 🔒 Security
+
+VelocityOS takes security seriously. We've implemented multiple layers of protection:
+
+- ✅ **Automated Secret Scanning**: Pre-commit hooks and GitHub Actions
+- ✅ **No Hardcoded Secrets**: All credentials in environment variables
+- ✅ **Firebase Security Rules**: Firestore access control
+- ✅ **Encrypted Secrets**: GitHub Secrets for CI/CD
+- ✅ **Regular Audits**: Automated dependency scanning
+
+**Report security issues**: See [SECURITY.md](SECURITY.md)
+
+---
 
 ## License
 
