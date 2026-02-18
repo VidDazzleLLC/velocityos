@@ -104,6 +104,10 @@ If you see `Unable to acquire impersonated credentials`, check:
 2. **Workload Identity Pool** principal has Workload Identity User role
 3. **Repository name** matches the one configured in WIF
 
+**Note:** The workflows in this repository currently use `FIREBASE_TOKEN` for authentication. If you see authentication errors, check:
+- [FAQ: Why does my deployment fail with "Failed to authenticate"?](../../FAQ.md#why-does-my-deployment-fail-with-failed-to-authenticate)
+- [FAQ: How do I generate a Firebase CI token?](../../FAQ.md#how-do-i-generate-a-firebase-ci-token-for-github-actions-deployment)
+
 ### Deployment Failures
 
 If deployment fails after authentication:
@@ -116,6 +120,7 @@ If deployment fails after authentication:
 
 ## Additional Resources
 
+- [FAQ.md](../../FAQ.md) - Frequently Asked Questions (start here!)
 - [Workload Identity Federation Documentation](https://cloud.google.com/iam/docs/workload-identity-federation)
 - [GitHub Actions OIDC](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect)
 - [Firebase Hosting Documentation](https://firebase.google.com/docs/hosting)
