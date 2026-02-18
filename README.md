@@ -11,9 +11,20 @@ VelocityOS is a next-gen AI business OS that automates routine work.
 - **Campaign Tools**: Run marketing campaigns
 - **Firebase Integration**: Scalable cloud infrastructure
 
-## 🚀 Quick Start - Deploy to Firebase
+## 🚀 Quick Launch
 
-The fastest way to get VelocityOS up and running:
+The fastest way to launch VelocityOS locally:
+
+```bash
+# One-command launch (installs dependencies and starts server)
+./launch.sh
+```
+
+The application will be available at `http://localhost:3000`
+
+## 🚀 Deploy to Firebase
+
+To deploy VelocityOS to the cloud:
 
 ```bash
 # 1. Run the setup wizard (installs dependencies, builds app, configures Firebase)
@@ -77,6 +88,7 @@ npm run test:e2e:ui
 
 ### Available Scripts
 
+- `./launch.sh` - Quick launch (installs dependencies and starts server)
 - `npm start` - Start production server
 - `npm run dev` - Start development server with hot reload
 - `npm run test:e2e` - Run end-to-end tests
