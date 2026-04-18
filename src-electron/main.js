@@ -2,12 +2,16 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 const waitOn = require('wait-on');
+const { autoUpdater } = require('electron-updater');
 const licenseManager = require('./licenseManager');
 const selfHealing = require('./selfHealing');
 const selfImproving = require('./selfImproving');
+const backupRestore = require('./backupRestore');
+const taskScheduler = require('./taskScheduler');
 
 let mainWindow;
 let serverProcess;
+let tray = null;
 
 async function createWindow() {
   // Check License
@@ -49,6 +53,44 @@ async function createWindow() {
 
   mainWindow.on('closed', function () {
     mainWindow = null;
+  });
+
+  // Check for updates
+  autoUpdater.checkForUpdatesAndNotify();
+
+  // Setup IPC Handlers
+  setupIPC();
+}
+
+function createTray() {
+  const iconPath = path.join(__dirname, '..', 'public', 'icon.png');
+  // fallback if icon.png doesn't exist
+  if (!require('fs').existsSync(iconPath)) return;
+
+  tray = new (require('electron').Tray)(iconPath);
+  const contextMenu = (require('electron').Menu).buildFromTemplate([
+    { label: 'Show App', click: () => { if(mainWindow) mainWindow.show(); } },
+    { label: 'Quit', click: () => { app.isQuiting = true; app.quit(); } }
+  ]);
+  tray.setToolTip('VelocityOS');
+  tray.setContextMenu(contextMenu);
+
+  tray.on('click', () => {
+    if(mainWindow) mainWindow.show();
+  });
+}
+
+function setupIPC() {
+  ipcMain.handle('create-backup', async () => {
+    return await backupRestore.createBackup(mainWindow);
+  });
+
+  ipcMain.handle('restore-backup', async () => {
+    return await backupRestore.restoreBackup(mainWindow);
+  });
+
+  ipcMain.handle('schedule-task', (event, { id, cron, data }) => {
+    return taskScheduler.scheduleTask(id, cron, data);
   });
 }
 
@@ -97,7 +139,10 @@ function startServer() {
   });
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+    createWindow();
+    createTray();
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
