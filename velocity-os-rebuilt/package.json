@@ -11,9 +11,11 @@
     "test": "echo \"no frontend tests yet\" && exit 0"
   },
   "dependencies": {
+    "firebase-admin": "^13.8.0",
     "next": "14.x",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "stripe": "^14.25.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

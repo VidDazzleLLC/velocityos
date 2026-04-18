@@ -2,9 +2,10 @@
   "name": "velocityos",
   "version": "1.0.0",
   "description": "VelocityOS is a next-gen AI business OS that automates routine work",
-  "main": "index.js",
+  "main": "src-electron/main.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "electron .",
+    "dist": "electron-builder && node scripts/package-zip.js",
     "dev": "nodemon server.js",
     "lint": "echo \"no linting configured for root\" && exit 0",
     "test": "echo \"no root tests yet\" && exit 0",
@@ -13,19 +14,70 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug"
   },
-  "keywords": ["ai", "business-os", "automation", "crm", "workflow"],
+  "keywords": [
+    "ai",
+    "business-os",
+    "automation",
+    "crm",
+    "workflow"
+  ],
   "author": "VidDazzle LLC",
   "license": "Apache-2.0",
   "dependencies": {
-    "express": "^4.18.2",
+    "archiver": "^7.0.1",
+    "axios": "^1.15.0",
+    "chokidar": "^5.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "cors": "^2.8.5"
+    "electron-updater": "^6.8.3",
+    "express": "^4.18.2",
+    "extract-zip": "^2.0.1",
+    "get-port": "^7.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "node-cron": "^4.2.1",
+    "node-machine-id": "^1.1.12",
+    "nodemailer": "^8.0.5",
+    "pdfkit": "^0.18.0",
+    "systeminformation": "^5.31.5",
+    "wait-on": "^9.0.5"
+  },
+  "build": {
+    "appId": "com.viddazzle.velocityos",
+    "productName": "VelocityOS",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src-electron/**/*",
+      "public/**/*",
+      "server.js",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "server.js"
+    ],
+    "mac": {
+      "target": "pkg"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true
+    }
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",
     "@types/node": "^25.0.10",
+    "electron": "^41.2.1",
+    "electron-builder": "^26.8.1",
     "nodemon": "^3.0.1",
-    "typescript": "^5.9.3",
-    "wait-on": "^9.0.3"
+    "typescript": "^5.9.3"
   }
 }
